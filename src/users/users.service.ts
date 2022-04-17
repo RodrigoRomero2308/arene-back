@@ -6,7 +6,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class UsersService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  findUnique = (whereInput: Prisma.UserWhereUniqueInput) => {
+  findOne = (whereInput: Prisma.UserWhereUniqueInput) => {
     return this.prismaService.user.findUnique({
       where: whereInput,
     });
