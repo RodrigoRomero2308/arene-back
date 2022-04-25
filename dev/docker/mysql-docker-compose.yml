@@ -1,0 +1,17 @@
+version: '2.7'
+
+services:
+  mysql:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: arene
+      MYSQL_USER: arene
+      MYSQL_PASSWORD: example
+    container_name: arene-db
+    volumes:
+      - ./mysqlData:/var/lib/mysql
+    ports:
+      - 3306:3306

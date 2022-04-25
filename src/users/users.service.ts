@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { HashService } from 'src/hash/hash.service';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -11,14 +11,34 @@ export class UsersService {
     private readonly hashService: HashService,
   ) {}
 
-  findOne = (whereInput: Prisma.UserWhereUniqueInput) => {
-    return this.prismaService.user.findUnique({
+  findOne = (whereInput: Prisma.UserWhereInput) => {
+    return this.prismaService.user.findFirst({
       where: whereInput,
     });
   };
 
-  private validateRegister = (registerDTO: RegisterUserDTO) => {
+  findMany = (findManyArgs: Prisma.UserFindManyArgs = {}) => {
+    return this.prismaService.user.findMany(findManyArgs);
+  };
+
+  private validateRegister = async (registerDTO: RegisterUserDTO) => {
     /* Aca realizaremos controles por ejemplo si ya existe un usuario con el dni o email que se esta queriendo usar para registrarse */
+    const alreadyExistingUser = await this.findOne({
+      OR: [
+        {
+          dni: registerDTO.dni,
+        },
+        {
+          email: registerDTO.email,
+        },
+      ],
+    });
+
+    if (alreadyExistingUser) {
+      throw new InternalServerErrorException({
+        message: 'Ya existe un usuario registrado con este DNI o email',
+      });
+    }
     return;
   };
 

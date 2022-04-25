@@ -10,14 +10,20 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  dni       String    @unique
-  email     String    @unique
-  firstname String
-  lastname  String
-  password  String
-  phone     String
-  active    Boolean
-  its       DateTime  @default(now())
-  uts       DateTime?
+  id           Int       @id @default(autoincrement())
+  dni          String    @unique
+  email        String    @unique
+  firstname    String
+  lastname     String
+  password     String
+  phone        String
+  active       Boolean
+  its          DateTime  @default(now())
+  uts          DateTime?
+  created_by   Int?
+  createdBy    User?     @relation("createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  usersCreated User[]    @relation("createdBy")
+  updated_by   Int?
+  updatedBy    User?     @relation("updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  usersUpdated User[]    @relation("updatedBy")
 }
