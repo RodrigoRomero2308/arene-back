@@ -5,6 +5,9 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "engines": {
+    "node": "^14 || ^16"
+  },
   "scripts": {
     "prebuild": "rimraf dist && npx prisma generate",
     "build": "nest build",
