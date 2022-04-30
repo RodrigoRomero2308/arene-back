@@ -43,7 +43,7 @@ export class UsersService {
   };
 
   registerUser = async (_registerDto: RegisterUserDTO) => {
-    this.validateRegister(_registerDto);
+    await this.validateRegister(_registerDto);
     const registerDto = JSON.parse(
       JSON.stringify(_registerDto),
     ) as RegisterUserDTO;
