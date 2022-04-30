@@ -4,11 +4,12 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HashModule } from './hash/hash.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ScalarsModule } from './graphql/scalars/scalar.module';
+import { CorsOptions } from 'apollo-server-express';
 
 @Module({
   imports: [
@@ -19,9 +20,23 @@ import { ScalarsModule } from './graphql/scalars/scalar.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    GraphQLModule.forRoot<ApolloDriverConfig>({
+    GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: true,
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        let corsConfig: CorsOptions | undefined = undefined;
+        const corsUrls = configService.get('CORS_URLS');
+        if (corsUrls) {
+          corsConfig = {
+            credentials: true,
+            origin: corsUrls,
+          };
+        }
+        return {
+          autoSchemaFile: true,
+          cors: corsConfig,
+        };
+      },
     }),
     HashModule,
   ],

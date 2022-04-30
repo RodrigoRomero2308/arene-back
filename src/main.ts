@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { PrismaService } from './prisma/prisma.service';
+import helmet from 'helmet';
 
 const validateEnvVariables = (configService: ConfigService) => {
   const variablesNotSetted: string[] = [];
@@ -26,6 +27,7 @@ const validateEnvVariables = (configService: ConfigService) => {
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.use(helmet());
   const prismaService = app.get(PrismaService);
   await prismaService.enableShutdownHooks(app);
   const configService = app.get(ConfigService);
