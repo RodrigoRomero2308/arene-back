@@ -10,6 +10,7 @@
   },
   "scripts": {
     "prebuild": "rimraf dist && npx prisma generate",
+    "render:build": "npm i && npm run build",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "prestart": "npx prisma generate",
