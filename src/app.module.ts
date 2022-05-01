@@ -9,7 +9,7 @@ import { HashModule } from './hash/hash.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ScalarsModule } from './graphql/scalars/scalar.module';
-import { CorsOptions } from 'apollo-server-express';
+import { getCorsConfig } from './utils/cors.utils';
 
 @Module({
   imports: [
@@ -24,14 +24,7 @@ import { CorsOptions } from 'apollo-server-express';
       driver: ApolloDriver,
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        let corsConfig: CorsOptions | undefined = undefined;
-        const corsUrls = configService.get('CORS_URLS');
-        if (corsUrls) {
-          corsConfig = {
-            credentials: true,
-            origin: corsUrls,
-          };
-        }
+        const corsConfig = getCorsConfig(configService);
         return {
           autoSchemaFile: true,
           cors: corsConfig,

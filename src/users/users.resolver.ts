@@ -17,8 +17,7 @@ export class UsersResolver {
   async register(
     @Args('input', { type: () => RegisterUserDTO }) input: RegisterUserDTO,
   ) {
-    const createdUser = await this.usersService.registerUser(input);
-    console.log(createdUser);
+    await this.usersService.registerUser(input);
     return true;
   }
 }
