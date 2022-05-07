@@ -1,4 +1,6 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, Query, Mutation, Resolver } from '@nestjs/graphql';
+import { IsAuthenticatedGuard } from 'src/auth/session.guard';
 import { RegisterUserDTO } from './DTO/register.dto';
 import { User } from './entity/user.entity';
 import { UsersService } from './users.service';
@@ -7,9 +9,9 @@ import { UsersService } from './users.service';
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
-  // TODO: protect with guard
   @Query(() => [User])
-  async users() {
+  @UseGuards(IsAuthenticatedGuard)
+  async getUsers() {
     return this.usersService.findMany();
   }
 

@@ -1,0 +1,7 @@
+export enum EnvironmentVariable {
+  PORT = 'PORT',
+  SESSION_SECRET = 'SESSION_SECRET',
+  CORS_METHOD = 'CORS_METHOD',
+  CORS_REG_EXP = 'CORS_REG_EXP',
+  CORS_URL = 'CORS_URL',
+}

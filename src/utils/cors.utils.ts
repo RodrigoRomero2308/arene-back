@@ -1,5 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { CorsOptions } from 'apollo-server-express';
+import { EnvironmentVariable } from 'src/enums/env.enum';
 import { getRegExpCorsConfig } from './corsMethodsFunctions/regexp.cors.utils';
 import { getSingleUrlCorsConfig } from './corsMethodsFunctions/singleUrl.cors.utils';
 
@@ -14,7 +15,7 @@ export const getCorsConfig = (configService: ConfigService): CorsOptions => {
     credentials: true,
   };
 
-  const corsMethod = configService.get('CORS_METHOD');
+  const corsMethod = configService.get(EnvironmentVariable.CORS_METHOD);
 
   switch (corsMethod) {
     case CorsMethod.MULTIPLE_URLs:

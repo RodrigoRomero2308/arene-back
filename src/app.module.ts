@@ -28,6 +28,12 @@ import { getCorsConfig } from './utils/cors.utils';
         return {
           autoSchemaFile: true,
           cors: corsConfig,
+          context: ({ req, res }) => ({ req, res }),
+          playground: {
+            settings: {
+              'request.credentials': 'include',
+            },
+          },
         };
       },
     }),
