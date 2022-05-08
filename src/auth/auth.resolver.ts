@@ -15,6 +15,7 @@ export class AuthResolver {
     @Context() context: { req: any; res: any; user: User },
   ) {
     context.req.session.userId = context.user.id;
+    context.req.session.lastUpdated = new Date();
     return true;
   }
 }

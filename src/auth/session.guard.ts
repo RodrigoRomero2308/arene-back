@@ -23,6 +23,7 @@ export class IsAuthenticatedGuard implements CanActivate {
     }
 
     req.user = user;
+    req.session.lastUpdated = new Date();
 
     return true;
   }

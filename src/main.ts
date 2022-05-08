@@ -6,10 +6,18 @@ import { PrismaService } from './prisma/prisma.service';
 import helmet from 'helmet';
 import * as session from 'express-session';
 import { EnvironmentVariable } from './enums/env.enum';
+import Redis from 'ioredis';
+import * as ConnectRedis from 'connect-redis';
+
+const RedisStore = ConnectRedis(session);
 
 const validateEnvVariables = (configService: ConfigService) => {
   const variablesNotSetted: string[] = [];
-  const variablesToValidate: string[] = [EnvironmentVariable.SESSION_SECRET];
+  const variablesToValidate: string[] = [
+    EnvironmentVariable.SESSION_SECRET,
+    EnvironmentVariable.REDIS_URL,
+    EnvironmentVariable.DATABASE_URL,
+  ];
 
   variablesToValidate.forEach((variable) => {
     const configuredVariable = configService.get(variable);
@@ -36,15 +44,26 @@ async function bootstrap() {
   const sessionSecret = configService.get<string>(
     EnvironmentVariable.SESSION_SECRET,
   );
+
   validateEnvVariables(configService);
+
   app.useGlobalPipes(
     new ValidationPipe({
       skipMissingProperties: true,
       transform: true,
     }),
   );
+
+  // Session prep
+  const redisUrl = configService.get(EnvironmentVariable.REDIS_URL) || '';
+  const redisClient = new Redis(redisUrl);
+
   app.use(
     session({
+      store: new RedisStore({
+        client: redisClient,
+        disableTouch: true, // deshabilitamos el touch por defecto del cliente para manejar nosotros el resave (en los guards)
+      }),
       secret: sessionSecret || 'secret',
       saveUninitialized: false,
       resave: false,
@@ -56,6 +75,8 @@ async function bootstrap() {
       },
     }),
   );
+
+  // Start the app
   const port = +configService.get(EnvironmentVariable.PORT) || 3000;
   await app.listen(port, () => {
     console.log(`Server listening on port ${port}`);

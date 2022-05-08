@@ -31,7 +31,7 @@ import { getCorsConfig } from './utils/cors.utils';
           context: ({ req, res }) => ({ req, res }),
           playground: {
             settings: {
-              'request.credentials': 'include',
+              'request.credentials': 'include', // Permite que la sesion se guarde como cookie cuando se usa el playground
             },
           },
         };
