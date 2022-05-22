@@ -10,20 +10,70 @@ datasource db {
 }
 
 model User {
-  id           Int       @id @default(autoincrement())
-  dni          String    @unique
-  email        String    @unique
-  firstname    String
-  lastname     String
-  password     String
-  phone        String
-  active       Boolean
-  its          DateTime  @default(now())
-  uts          DateTime?
-  created_by   Int?
-  createdBy    User?     @relation("createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  usersCreated User[]    @relation("createdBy")
-  updated_by   Int?
-  updatedBy    User?     @relation("updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  usersUpdated User[]    @relation("updatedBy")
+  id                       Int              @id @default(autoincrement())
+  dni                      String           @unique
+  email                    String           @unique
+  firstname                String
+  lastname                 String
+  password                 String
+  phone                    String
+  active                   Boolean
+  its                      DateTime         @default(now())
+  uts                      DateTime?
+  created_by               Int?
+  createdBy                User?            @relation("createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  usersCreated             User[]           @relation("createdBy")
+  updated_by               Int?
+  updatedBy                User?            @relation("updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  usersUpdated             User[]           @relation("updatedBy")
+  rolesCreated             Role[]           @relation("role_createdBy")
+  rolesUpdated             Role[]           @relation("role_updatedBy")
+  rolesDeleted             Role[]           @relation("role_deletedBy")
+  RoleUser                 RoleUser[]
+  AssignedRolesPermissions PermissionRole[]
+}
+
+model Role {
+  id             Int              @id @default(autoincrement())
+  name           String
+  its            DateTime         @default(now())
+  uts            DateTime?
+  dts            DateTime?
+  created_by     Int?
+  updated_by     Int?
+  deleted_by     Int?
+  createdBy      User?            @relation("role_createdBy", fields: [created_by], references: [id])
+  updatedBy      User?            @relation("role_updatedBy", fields: [updated_by], references: [id])
+  deletedBy      User?            @relation("role_deletedBy", fields: [deleted_by], references: [id])
+  RoleUser       RoleUser[]
+  PermissionRole PermissionRole[]
+}
+
+model RoleUser {
+  user User @relation(fields: [userId], references: [id])
+  role Role @relation(fields: [roleId], references: [id])
+
+  userId Int
+  roleId Int
+
+  @@id([userId, roleId])
+}
+
+model Permission {
+  code           String           @id
+  shortname      String
+  description    String?
+  PermissionRole PermissionRole[]
+}
+
+model PermissionRole {
+  permissionCode String
+  roleId         Int
+  its            DateTime   @default(now())
+  created_by     Int
+  permission     Permission @relation(fields: [permissionCode], references: [code])
+  role           Role       @relation(fields: [roleId], references: [id])
+  createdBy      User       @relation(fields: [created_by], references: [id])
+
+  @@id([permissionCode, roleId])
 }
