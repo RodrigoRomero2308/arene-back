@@ -4,7 +4,9 @@ import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class IsAuthenticatedGuard implements CanActivate {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {
+    // Intentional
+  }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context);
