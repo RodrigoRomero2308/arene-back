@@ -14,3 +14,8 @@ Debes copiar el archivo `.env.example` con el nombre `.env` y completar las vari
 Luego debemos verificar que la base de datos esta inicializada (dirigirse al siguiente [link](dev/docker/README.md)). Podemos ejecutar `npx prisma studio` para acceder a los datos de la base en tiempo real, si no vemos los ultimos cambios, podemos ejecutar `npx prisma db push` para actualizar la base de datos. En caso de levantar la base de datos en local, ver readme en carpeta dev/docker
 <br/>
 Una vez que tenemos todo listo, debemos ejecutar `npm start` para arrancar el servidor
+
+## Mas informacion sobre desarrollo en este proyecto
+
+- Como agregar datos a la base de datos, y preparar scripts de datos iniciales: [Seeding](docs/seeding.md)
+- Como funciona el acceso basado en permisos: [Permission Based Access Control](docs/permissionBasedAccessControl.md)
