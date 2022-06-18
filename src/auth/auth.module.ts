@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { AuthResolver } from './auth.resolver';
 import { HashModule } from 'src/hash/hash.module';
 import { LocalStrategy } from './local.strategy';
+import { PermissionModule } from 'src/permission/permission.module';
 
 @Module({
   providers: [AuthService, AuthResolver, LocalStrategy],
@@ -14,6 +15,7 @@ import { LocalStrategy } from './local.strategy';
       session: true,
     }),
     HashModule,
+    PermissionModule,
   ],
 })
 export class AuthModule {}

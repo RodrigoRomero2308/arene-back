@@ -1,6 +1,6 @@
 // Maps user model for Prisma
 
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class User {
@@ -30,9 +30,13 @@ export class User {
   @Field()
   its: Date;
 
-  @Field()
-  created_by: number;
+  @Field(() => Int, {
+    nullable: true,
+  })
+  created_by?: number | null;
 
-  @Field()
-  updated_by: number;
+  @Field(() => Int, {
+    nullable: true,
+  })
+  updated_by?: number | null;
 }
