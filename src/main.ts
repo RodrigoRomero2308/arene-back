@@ -67,7 +67,7 @@ async function bootstrap() {
       secret: sessionSecret || 'secret',
       saveUninitialized: false,
       resave: false,
-      name: 'sessId',
+      name: configService.get(EnvironmentVariable.SESSION_NAME) || 'sessId',
       cookie: {
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,

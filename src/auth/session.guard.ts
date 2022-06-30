@@ -30,8 +30,6 @@ export class IsAuthenticatedGuard implements CanActivate {
       req.session.userId,
     );
 
-    console.log(userPermissions);
-
     if (!user?.active) {
       return false;
     }
