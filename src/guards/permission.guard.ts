@@ -6,15 +6,12 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { REQUIRED_PERMISSIONS_KEY } from 'src/decorators/permission.decorator';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { REQUIRED_PERMISSIONS_KEY } from '@/decorators/permission.decorator';
+import { AuthenticatedUser } from '@/users/entity/authenticated.user.model';
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {
-  constructor(
-    private reflector: Reflector,
-    private readonly prismaService: PrismaService,
-  ) {
+  constructor(private reflector: Reflector) {
     // Intentional
   }
 
@@ -30,24 +27,13 @@ export class PermissionsGuard implements CanActivate {
 
     const request = GqlExecutionContext.create(context).getContext().req;
 
-    const userId: number | undefined = request?.user?.id;
+    const authenticatedUser: AuthenticatedUser | undefined = request?.user;
 
-    const userPermissions = await this.prismaService.permission.findMany({
-      where: {
-        PermissionRole: {
-          some: {
-            role: {
-              dts: null,
-              RoleUser: {
-                some: {
-                  userId,
-                },
-              },
-            },
-          },
-        },
-      },
-    });
+    if (!authenticatedUser) {
+      throw new UnauthorizedException();
+    }
+
+    const userPermissions = authenticatedUser.permissions;
 
     if (
       permissionsRequired.every((permission) =>

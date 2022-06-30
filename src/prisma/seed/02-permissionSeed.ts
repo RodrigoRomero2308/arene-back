@@ -1,12 +1,18 @@
 import { Prisma, PrismaClient } from '@prisma/client';
+import { PermissionCodes } from '@/enums/permissionCodes.enum';
 
 const seedPermissions = async (prisma: PrismaClient) => {
   console.log('Seeding permissions...');
   const permissions: Prisma.PermissionCreateInput[] = [
     {
-      code: 'ADMIN',
+      code: PermissionCodes.Admin,
       shortname: 'Admin permission',
       description: 'Permission for admin users',
+    },
+    {
+      code: PermissionCodes.UsersRead,
+      shortname: 'Users Read',
+      description: 'Permission to query users',
     },
   ];
 

@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
-import { UsersModule } from 'src/users/users.module';
+import { UsersModule } from '@/users/users.module';
 import { AuthService } from './auth.service';
 import { AuthResolver } from './auth.resolver';
-import { HashModule } from 'src/hash/hash.module';
+import { HashModule } from '@/hash/hash.module';
 import { LocalStrategy } from './local.strategy';
+import { PermissionModule } from '@/permission/permission.module';
 
 @Module({
   providers: [AuthService, AuthResolver, LocalStrategy],
@@ -14,6 +15,7 @@ import { LocalStrategy } from './local.strategy';
       session: true,
     }),
     HashModule,
+    PermissionModule,
   ],
 })
 export class AuthModule {}

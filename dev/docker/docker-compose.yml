@@ -4,7 +4,7 @@ services:
   mysql:
     image: mysql:8
     command: --default-authentication-plugin=mysql_native_password
-    restart: always
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: example
       MYSQL_DATABASE: arene
@@ -17,6 +17,7 @@ services:
       - 3306:3306
   redis:
     image: 'bitnami/redis:latest'
+    restart: unless-stopped
     environment:
       - REDIS_PASSWORD=redis
     ports:
