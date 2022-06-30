@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { SystemRoles } from '@/enums/systemRoles.enum';
 
 const seedRoleUsers = async (prisma: PrismaClient) => {
   console.log('Seeding relations between roles and users...');
@@ -7,7 +8,7 @@ const seedRoleUsers = async (prisma: PrismaClient) => {
     userDni: string;
   }[] = [
     {
-      roleName: 'Admin',
+      roleName: SystemRoles.Admin,
       userDni: 'ADMIN',
     },
   ];

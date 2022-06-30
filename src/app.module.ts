@@ -10,6 +10,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ScalarsModule } from './graphql/scalars/scalar.module';
 import { getCorsConfig } from './utils/cors.utils';
+import { PermissionModule } from './permission/permission.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { getCorsConfig } from './utils/cors.utils';
       },
     }),
     HashModule,
+    PermissionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
