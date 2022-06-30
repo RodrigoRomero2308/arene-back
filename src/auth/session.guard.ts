@@ -1,9 +1,9 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { PermissionService } from 'src/permission/permission.service';
-import { AuthenticatedUser } from 'src/users/entity/authenticated.user.model';
-import { User } from 'src/users/entity/user.entity';
-import { UsersService } from 'src/users/users.service';
+import { PermissionService } from '@/permission/permission.service';
+import { AuthenticatedUser } from '@/users/entity/authenticated.user.model';
+import { UsersService } from '@/users/users.service';
+import { User } from '@/prisma-models/user/user.model';
 
 @Injectable()
 export class IsAuthenticatedGuard implements CanActivate {
@@ -29,6 +29,8 @@ export class IsAuthenticatedGuard implements CanActivate {
     const userPermissions = await this.permissionService.getPermissionsForUser(
       req.session.userId,
     );
+
+    console.log(userPermissions);
 
     if (!user?.active) {
       return false;

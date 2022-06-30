@@ -1,21 +1,18 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Query, Mutation, Resolver } from '@nestjs/graphql';
-import { IsAuthenticatedGuard } from 'src/auth/session.guard';
-import { CurrentUser } from 'src/decorators/user.decorator';
+import { IsAuthenticatedGuard } from '@/auth/session.guard';
+import { CurrentUser } from '@/decorators/user.decorator';
 import { RegisterUserDTO } from './DTO/register.dto';
 import { AuthenticatedUser } from './entity/authenticated.user.model';
-import { User } from './entity/user.entity';
 import { UsersService } from './users.service';
+import { PermissionsGuard } from '@/guards/permission.guard';
+import { RequiredPermissions } from '@/decorators/permission.decorator';
+import { PermissionCodes } from '@/enums/permissionCodes.enum';
+import { User } from '@/prisma-models/user/user.model';
 
 @Resolver()
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
-
-  @Query(() => [User])
-  @UseGuards(IsAuthenticatedGuard)
-  async getUsers() {
-    return this.usersService.findMany();
-  }
 
   @Mutation(() => Boolean)
   async register(
@@ -29,5 +26,12 @@ export class UsersResolver {
   @UseGuards(IsAuthenticatedGuard)
   async authenticate(@CurrentUser() user: AuthenticatedUser) {
     return user;
+  }
+
+  @Query(() => [User])
+  @RequiredPermissions(PermissionCodes.UsersRead)
+  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
+  async getUsers() {
+    return this.usersService.findMany();
   }
 }

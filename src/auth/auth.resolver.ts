@@ -1,6 +1,6 @@
+import { User } from '@/prisma-models/user/user.model';
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
-import { User } from 'src/users/entity/user.entity';
 import { LocalAuthGuard } from './local.auth.guard';
 
 @Resolver()

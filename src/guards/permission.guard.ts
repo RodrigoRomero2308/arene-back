@@ -6,8 +6,8 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { REQUIRED_PERMISSIONS_KEY } from 'src/decorators/permission.decorator';
-import { AuthenticatedUser } from 'src/users/entity/authenticated.user.model';
+import { REQUIRED_PERMISSIONS_KEY } from '@/decorators/permission.decorator';
+import { AuthenticatedUser } from '@/users/entity/authenticated.user.model';
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {

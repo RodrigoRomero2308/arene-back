@@ -22,7 +22,7 @@ Una vez dado, el resolver que sirve para obtener dicho reporte tiene que ser dec
 
 ```typescript
 @Query(() => [Report])
-@RequiredPermissions(["Obtener reporte"])
+@RequiredPermissions("Obtener reporte")
 @UseGuards(IsAuthenticatedGuard, PermissionsGuard) // Es importante mantener el orden de los guards
 async obtenerReporte() {
   return this.reportService.obtenerReporte();

@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client';
+import { PermissionCodes } from '@/enums/permissionCodes.enum';
+import { SystemRoles } from '@/enums/systemRoles.enum';
 
 const seedRolePermissions = async (prisma: PrismaClient) => {
   console.log('Seeding relations between roles and permissions...');
@@ -14,14 +16,31 @@ const seedRolePermissions = async (prisma: PrismaClient) => {
   }
 
   const rolesPermissions: {
-    roleName: string;
+    roleNames: string[];
     permissionCode: string;
   }[] = [
     {
-      roleName: 'Admin',
-      permissionCode: 'ADMIN',
+      roleNames: [],
+      permissionCode: PermissionCodes.Admin,
+    },
+    {
+      roleNames: [
+        SystemRoles.Administrador,
+        SystemRoles.Coordinador,
+        SystemRoles.Director,
+        SystemRoles.Fisiatra,
+        SystemRoles.Profesional,
+      ],
+      permissionCode: PermissionCodes.UsersRead,
     },
   ];
+
+  /* Todos los permisos los debe tener admin */
+  for (const rolePermission of rolesPermissions) {
+    if (!rolePermission.roleNames.includes(PermissionCodes.Admin)) {
+      rolePermission.roleNames.push(SystemRoles.Admin);
+    }
+  }
 
   const dbRolePermissions = await prisma.permissionRole.findMany({
     include: {
@@ -33,38 +52,40 @@ const seedRolePermissions = async (prisma: PrismaClient) => {
   let relationsCreated = 0;
 
   for (const rolePermission of rolesPermissions) {
-    const dbRolePermission = dbRolePermissions.find(
-      (item) =>
-        item.role.name === rolePermission.roleName &&
-        item.permission.code === rolePermission.permissionCode,
-    );
+    for (const roleName of rolePermission.roleNames) {
+      const dbRolePermission = dbRolePermissions.find(
+        (item) =>
+          item.role.name === roleName &&
+          item.permission.code === rolePermission.permissionCode,
+      );
 
-    if (!dbRolePermission) {
-      const dbRole = await prisma.role.findFirst({
-        where: {
-          name: rolePermission.roleName,
-        },
-      });
-
-      const dbPermission = await prisma.permission.findFirst({
-        where: {
-          code: rolePermission.permissionCode,
-        },
-      });
-
-      if (dbRole && dbPermission) {
-        await prisma.permissionRole.create({
-          data: {
-            permissionCode: dbPermission.code,
-            roleId: dbRole.id,
-            created_by: adminUser.id,
+      if (!dbRolePermission) {
+        const dbRole = await prisma.role.findFirst({
+          where: {
+            name: roleName,
           },
         });
-        relationsCreated++;
-      } else {
-        console.warn(
-          `Relation could not be created for role ${rolePermission.roleName} and permission ${rolePermission.permissionCode}`,
-        );
+
+        const dbPermission = await prisma.permission.findFirst({
+          where: {
+            code: rolePermission.permissionCode,
+          },
+        });
+
+        if (dbRole && dbPermission) {
+          await prisma.permissionRole.create({
+            data: {
+              permissionCode: dbPermission.code,
+              roleId: dbRole.id,
+              created_by: adminUser.id,
+            },
+          });
+          relationsCreated++;
+        } else {
+          console.warn(
+            `Relation could not be created for role ${roleName} and permission ${rolePermission.permissionCode}`,
+          );
+        }
       }
     }
   }
