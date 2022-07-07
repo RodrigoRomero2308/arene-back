@@ -8,6 +8,7 @@ import * as session from 'express-session';
 import { EnvironmentVariable } from './enums/env.enum';
 import Redis from 'ioredis';
 import * as ConnectRedis from 'connect-redis';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 const RedisStore = ConnectRedis(session);
 
@@ -36,7 +37,7 @@ const validateEnvVariables = (configService: ConfigService) => {
 };
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.use(helmet());
   const prismaService = app.get(PrismaService);
   await prismaService.enableShutdownHooks(app);
@@ -58,6 +59,12 @@ async function bootstrap() {
   const redisUrl = configService.get(EnvironmentVariable.REDIS_URL) || '';
   const redisClient = new Redis(redisUrl);
 
+  const nodeEnv = configService.get('NODE_ENV');
+
+  if (nodeEnv === 'production') {
+    app.set('trust proxy', 1);
+  }
+
   app.use(
     session({
       store: new RedisStore({
@@ -69,7 +76,7 @@ async function bootstrap() {
       resave: false,
       name: configService.get(EnvironmentVariable.SESSION_NAME) || 'sessId',
       cookie: {
-        secure: process.env.NODE_ENV === 'production',
+        secure: nodeEnv === 'production',
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7,
       },
