@@ -79,7 +79,7 @@ async function bootstrap() {
         secure: nodeEnv === 'production',
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7,
-        sameSite: 'none',
+        sameSite: nodeEnv === 'production' ? 'none' : undefined,
       },
     }),
   );
