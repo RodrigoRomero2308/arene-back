@@ -10,6 +10,12 @@ generator nestgraphql {
   noTypeId    = true
 }
 
+generator dbml {
+  provider            = "prisma-dbml-generator"
+  projectName         = "AReNe"
+  projectDatabaseType = "PostgreSQL"
+}
+
 datasource db {
   provider             = "mysql"
   url                  = env("DATABASE_URL")
