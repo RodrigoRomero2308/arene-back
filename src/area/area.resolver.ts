@@ -7,6 +7,9 @@ import { UpdateAreaInput } from '@/area/DTO/updateAreaInput';
 import { CreateAreaInput } from '@/area/DTO/createAreaInput';
 import { CurrentUser } from '@/decorators/user.decorator';
 import { AuthenticatedUser } from '@/users/entity/authenticated.user.model';
+import { PermissionCodes } from '@/enums/permissionCodes.enum';
+import { RequiredPermissions } from '@/decorators/permission.decorator';
+import { PermissionsGuard } from '@/guards/permission.guard';
 
 @Resolver()
 export class AreaResolver {
@@ -32,7 +35,8 @@ export class AreaResolver {
   }
 
   @Mutation(() => Area)
-  @UseGuards(IsAuthenticatedGuard)
+  @RequiredPermissions(PermissionCodes.AreaCreate)
+  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
   async createArea(
     @CurrentUser() user: AuthenticatedUser,
     @Args('input', {
@@ -44,7 +48,8 @@ export class AreaResolver {
   }
 
   @Mutation(() => Area)
-  @UseGuards(IsAuthenticatedGuard)
+  @RequiredPermissions(PermissionCodes.AreaUpdate)
+  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
   async updateArea(
     @CurrentUser() user: AuthenticatedUser,
     @Args('id', { type: () => Int }) id: number,
@@ -57,7 +62,8 @@ export class AreaResolver {
   }
 
   @Mutation(() => Area)
-  @UseGuards(IsAuthenticatedGuard)
+  @RequiredPermissions(PermissionCodes.AreaDelete)
+  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
   async deleteArea(
     @CurrentUser() user: AuthenticatedUser,
     @Args('id', { type: () => Int }) id: number,
