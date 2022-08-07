@@ -49,7 +49,7 @@ Primero hay que verificar que tenemos el CLI instalado, por lo cual podemos abri
 El CLI cuenta con un comando que nos permite generar cosas del framework, como por ejemplo: modulos, servicios, resolvers, controladores, etc. Podemos ver la lista completa ejecutando `nest generate --help`.
 <br>
 <br>
-La forma mas rapida de generar un CLI es con la generacion de recurso(resource) por lo cual podemos ejecutar `nest generate --no-spec resource {nombre del modulo a crear}`. La opcion `--no-spec` es para que NestJS no genere archivos de testing para el modulo. Supongamos que queremos crear el modulo de roles, deberiamos ejecutar `nest generate --no-spec role`
+La forma mas rapida de generar un CRUD es con la generacion de recurso(resource) por lo cual podemos ejecutar `nest generate --no-spec resource {nombre del modulo a crear}`. La opcion `--no-spec` es para que NestJS no genere archivos de testing para el modulo. Supongamos que queremos crear el modulo de roles, deberiamos ejecutar `nest generate --no-spec resource role`
 <br>
 <br>
 Nest nos preguntara que tipo de recurso queremos generar, entre las opciones una dice `GraphQL (code first)`, elegimos esta con las flechas del teclado y apretamos enter.
@@ -62,14 +62,14 @@ Nos deberia saltar que se crearon archivos para el modulo en una carpeta segun e
 Nest nos generara un archivo de module, un resolver y un service para el modulo, ademas de 2 DTOs, uno de creacion y uno de actualizacion.
 <br>
 <br>
-Lo primero que haremos sera modificar los dtos para usar uno de los modelos generados por prisma. Esta el ejemplo en el modulo de area. Nos deberia quedar algo como esto:
+Lo primero que haremos sera borrar la carpeta entity, ya que Prisma nos da los modelos de entidad, luego pasaremos a modificar los dtos para usar uno de los modelos generados por prisma. Esta el ejemplo en el modulo de area. Nos deberia quedar algo como esto:
 
 ```javascript
 @InputType()
-export class CreateRoleInput extends OmitType(RoleCreateInput, [
-  'createdBy',
-  'deletedBy',
-  'updatedBy',
+export class CreateRoleInput extends OmitType(RoleUncheckedCreateInput, [
+  'created_by',
+  'deleted_by',
+  'updated_by',
   'its',
   'uts',
   'dts',
@@ -81,7 +81,7 @@ export class CreateRoleInput extends OmitType(RoleCreateInput, [
 
 Con `OmitType` basicamente estamos generando un nuevo tipo a partir el primer parametro, omitiendo ciertas propiedades. Entre las propiedades que siempre debemos excluir de estos dtos tenemos:
 
-- createdBy, updatedBy, deletedBy, its, uts, dts: son propiedades que se utilizan para saber quien creo, modifico y elimino las entidades y saber cuando ocurrio.
+- created_by, updated_by, deleted_by, its, uts, dts: son propiedades que se utilizan para saber quien creo, modifico y elimino las entidades y saber cuando ocurrio.
 - Todos los campos que refieran a relaciones en el modelo de prisma (Veran que el tipo en el modelo no es primitivo, por ejemplo RoleUser)
 
 Una vez que tengamos los DTOs modificados, debemos modificar los resolvers para que usen estos dtos en lugar de los viejos, pero ademas debemos ponerles las guards segun si es requerido controlar si es necesario control de acceso o de permisos. Pueden leer mas sobre eso [aqui](./permissionBasedAccessControl.md)
