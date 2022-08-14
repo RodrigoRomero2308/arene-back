@@ -12,6 +12,7 @@ import { ScalarsModule } from '@/graphql/scalars/scalar.module';
 import { getCorsConfig } from '@/utils/cors.utils';
 import { PermissionModule } from '@/permission/permission.module';
 import { AreaModule } from '@/area/area.module';
+import { RoleModule } from './role/role.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { AreaModule } from '@/area/area.module';
     HashModule,
     PermissionModule,
     AreaModule,
+    RoleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
