@@ -44,6 +44,16 @@ const seedPermissions = async (prisma: PrismaClient) => {
       shortname: 'Role Delete',
       description: 'Permission to delete Roles',
     },
+    {
+      code: PermissionCodes.RoleUserCreate,
+      shortname: 'RoleUser Create',
+      description: 'Permission to create RoleUsers',
+    },
+    {
+      code: PermissionCodes.RoleUserDelete,
+      shortname: 'RoleUser Delete',
+      description: 'Permission to delete RoleUsers',
+    },
   ];
 
   const dbPermissions = await prisma.permission.findMany();
