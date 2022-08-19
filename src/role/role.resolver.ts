@@ -70,14 +70,4 @@ export class RoleResolver {
   ) {
     return this.roleService.deleteRole(id, user.id);
   }
-
-  @Mutation(() => Role)
-  @RequiredPermissions(PermissionCodes.RoleAlta)
-  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
-  async altaRole(
-    @CurrentUser() user: AuthenticatedUser,
-    @Args('id', { type: () => Int }) id: number,
-  ) {
-    return this.roleService.altaRole(id);
-  }
 }
