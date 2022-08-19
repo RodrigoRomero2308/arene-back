@@ -16,10 +16,29 @@ export class RoleUserService {
       },
     });
 
+    const roleExist = await this.prismaService.role.count({
+      where: {
+        id: roleId,
+        deleted_by: null,
+      },
+    });
+
+    const userExist = await this.prismaService.user.count({
+      where: {
+        id: userId,
+      },
+    });
+
     if (roleUserExist) {
       throw new Error(
         `Relacion ya existente entre usuario ${userId} y rol ${roleId}}`,
       );
+    }
+    if (roleExist == 0) {
+      throw new Error('Id de rol inexistente');
+    }
+    if (userExist == 0) {
+      throw new Error('Id de usuario inexistente');
     }
   }
 
