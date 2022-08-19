@@ -40,7 +40,7 @@ export class RoleService {
     });
 
     if (rolesWithSameName) {
-      throw new Error('Nombre de área ya utilizado');
+      throw new Error('Nombre de rol ya utilizado');
     }
   }
 
