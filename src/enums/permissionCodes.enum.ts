@@ -7,4 +7,6 @@ export enum PermissionCodes {
   RoleCreate = 'ROLE_C',
   RoleUpdate = 'ROLE_U',
   RoleDelete = 'ROLE_D',
+  RoleUserCreate = 'ROLEUSER_C',
+  RoleUserDelete = 'ROLEUSER_D',
 }
