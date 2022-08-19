@@ -13,6 +13,7 @@ import { getCorsConfig } from '@/utils/cors.utils';
 import { PermissionModule } from '@/permission/permission.module';
 import { AreaModule } from '@/area/area.module';
 import { RoleModule } from './role/role.module';
+import { RoleUserModule } from './role-user/role-user.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { RoleModule } from './role/role.module';
     PermissionModule,
     AreaModule,
     RoleModule,
+    RoleUserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
