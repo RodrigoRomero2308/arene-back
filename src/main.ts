@@ -38,7 +38,7 @@ const validateEnvVariables = (configService: ConfigService) => {
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV === 'production') {
     app.use(helmet());
   }
   const prismaService = app.get(PrismaService);
