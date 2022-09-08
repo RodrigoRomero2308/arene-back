@@ -7,15 +7,20 @@ import { CreateAreaInput } from '@/area/DTO/createAreaInput';
 export class AreaService {
   constructor(private readonly prismaService: PrismaService) {}
   findById(id: number) {
-    return this.prismaService.area.findUnique({
+    return this.prismaService.area.findFirst({
       where: {
         id,
+        dts: null,
       },
     });
   }
 
   getList() {
-    return this.prismaService.area.findMany();
+    return this.prismaService.area.findMany({
+      where: {
+        dts: null,
+      },
+    });
   }
 
   async checkAreaName({
