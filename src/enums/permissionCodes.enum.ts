@@ -7,4 +7,5 @@ export enum PermissionCodes {
   RoleCreate = 'ROLE_C',
   RoleUpdate = 'ROLE_U',
   RoleDelete = 'ROLE_D',
+  AdminArea = 'ADMIN_AREA',
 }
