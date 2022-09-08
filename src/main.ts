@@ -38,7 +38,9 @@ const validateEnvVariables = (configService: ConfigService) => {
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.use(helmet());
+  if (process.env.NODE_ENV === 'production') {
+    app.use(helmet());
+  }
   const prismaService = app.get(PrismaService);
   await prismaService.enableShutdownHooks(app);
   const configService = app.get(ConfigService);
@@ -79,7 +81,7 @@ async function bootstrap() {
         secure: nodeEnv === 'production',
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7,
-        sameSite: 'none',
+        sameSite: nodeEnv === 'production' ? 'none' : undefined,
       },
     }),
   );

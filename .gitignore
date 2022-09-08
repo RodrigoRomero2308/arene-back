@@ -27,4 +27,6 @@ lerna-debug.log*
 .settings/
 *.sublime-workspace
 
+prisma/dbml**
+
 .env

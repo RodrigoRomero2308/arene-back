@@ -2,6 +2,7 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
@@ -11,6 +12,7 @@ import { AuthenticatedUser } from '@/users/entity/authenticated.user.model';
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {
+  private readonly logger = new Logger(PermissionsGuard.name);
   constructor(private reflector: Reflector) {
     // Intentional
   }
@@ -30,6 +32,7 @@ export class PermissionsGuard implements CanActivate {
     const authenticatedUser: AuthenticatedUser | undefined = request?.user;
 
     if (!authenticatedUser) {
+      this.logger.warn('Not authenticated user', 'Permission Guard');
       throw new UnauthorizedException();
     }
 
@@ -44,7 +47,14 @@ export class PermissionsGuard implements CanActivate {
     ) {
       return true;
     }
-
+    this.logger.warn(
+      `Unauthorized user, permissions required: ${permissionsRequired.join(
+        ', ',
+      )}. userId: ${authenticatedUser.id}`,
+    );
+    this.logger.debug(
+      `Permissions: ${userPermissions.map((item) => item.code).join(', ')}`,
+    );
     throw new UnauthorizedException();
   }
 }

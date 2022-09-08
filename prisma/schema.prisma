@@ -10,6 +10,12 @@ generator nestgraphql {
   noTypeId    = true
 }
 
+generator dbml {
+  provider            = "prisma-dbml-generator"
+  projectName         = "AReNe"
+  projectDatabaseType = "PostgreSQL"
+}
+
 datasource db {
   provider             = "mysql"
   url                  = env("DATABASE_URL")
@@ -39,11 +45,15 @@ model User {
   rolesDeleted             Role[]           @relation("role_deletedBy")
   RoleUser                 RoleUser[]
   AssignedRolesPermissions PermissionRole[]
+  areasCreated             Area[]           @relation("area_createdBy")
+  areasUpdated             Area[]           @relation("area_updatedBy")
+  areasDeleted             Area[]           @relation("area_deletedBy")
 }
 
 model Role {
   id             Int              @id @default(autoincrement())
   name           String
+  description    String?
   its            DateTime         @default(now())
   uts            DateTime?
   dts            DateTime?
@@ -85,4 +95,19 @@ model PermissionRole {
   createdBy      User       @relation(fields: [created_by], references: [id])
 
   @@id([permissionCode, roleId])
+}
+
+model Area {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  created_by  Int
+  updated_by  Int?
+  deleted_by  Int?
+  its         DateTime  @default(now())
+  uts         DateTime?
+  dts         DateTime?
+  createdBy   User      @relation("area_createdBy", fields: [created_by], references: [id])
+  updatedBy   User?     @relation("area_updatedBy", fields: [updated_by], references: [id])
+  deletedBy   User?     @relation("area_deletedBy", fields: [deleted_by], references: [id])
 }

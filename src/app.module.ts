@@ -1,16 +1,18 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { PrismaModule } from './prisma/prisma.module';
+import { AppController } from '@/app.controller';
+import { AppService } from '@/app.service';
+import { AuthModule } from '@/auth/auth.module';
+import { UsersModule } from '@/users/users.module';
+import { PrismaModule } from '@/prisma/prisma.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { HashModule } from './hash/hash.module';
+import { HashModule } from '@/hash/hash.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { ScalarsModule } from './graphql/scalars/scalar.module';
-import { getCorsConfig } from './utils/cors.utils';
-import { PermissionModule } from './permission/permission.module';
+import { ScalarsModule } from '@/graphql/scalars/scalar.module';
+import { getCorsConfig } from '@/utils/cors.utils';
+import { PermissionModule } from '@/permission/permission.module';
+import { AreaModule } from '@/area/area.module';
+import { RoleModule } from './role/role.module';
 
 @Module({
   imports: [
@@ -40,6 +42,8 @@ import { PermissionModule } from './permission/permission.module';
     }),
     HashModule,
     PermissionModule,
+    AreaModule,
+    RoleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
