@@ -15,6 +15,6 @@ export class RegisterUserDTO {
   lastname: string;
   @Field()
   password: string;
-  @Field()
-  phone: string;
+  @Field(() => Date)
+  birth_date: Date;
 }
