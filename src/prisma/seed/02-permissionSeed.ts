@@ -45,6 +45,11 @@ const seedPermissions = async (prisma: PrismaClient) => {
       description: 'Permission to delete Roles',
     },
     {
+      code: PermissionCodes.AdminArea,
+      shortname: 'Administrate Areas',
+      description: 'Permission needed to access areas admin page',
+    },
+    {
       code: PermissionCodes.RoleUserCreate,
       shortname: 'RoleUser Create',
       description: 'Permission to create RoleUsers',
