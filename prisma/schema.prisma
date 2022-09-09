@@ -23,31 +23,72 @@ datasource db {
 }
 
 model User {
-  id                       Int              @id @default(autoincrement())
-  dni                      String           @unique
-  email                    String           @unique
-  firstname                String
-  lastname                 String
+  id                        Int                  @id @default(autoincrement())
+  dni                       String               @unique
+  email                     String               @unique
+  firstname                 String
+  lastname                  String
   /// @HideField()
-  password                 String
-  phone                    String
-  active                   Boolean
-  its                      DateTime         @default(now())
-  uts                      DateTime?
-  created_by               Int?
-  createdBy                User?            @relation("createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  usersCreated             User[]           @relation("createdBy")
-  updated_by               Int?
-  updatedBy                User?            @relation("updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  usersUpdated             User[]           @relation("updatedBy")
-  rolesCreated             Role[]           @relation("role_createdBy")
-  rolesUpdated             Role[]           @relation("role_updatedBy")
-  rolesDeleted             Role[]           @relation("role_deletedBy")
-  RoleUser                 RoleUser[]
-  AssignedRolesPermissions PermissionRole[]
-  areasCreated             Area[]           @relation("area_createdBy")
-  areasUpdated             Area[]           @relation("area_updatedBy")
-  areasDeleted             Area[]           @relation("area_deletedBy")
+  password                  String
+  active                    Boolean
+  birth_date                DateTime             @db.Date
+  its                       DateTime             @default(now())
+  uts                       DateTime?
+  dts                       DateTime?
+  created_by                Int?
+  updated_by                Int?
+  deleted_by                Int?
+  phone_type_id             Int?
+  phone_number              String?
+  adress_id                 Int?
+  profile_picture_id        Int?
+  createdBy                 User?                @relation("createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  usersCreated              User[]               @relation("createdBy")
+  updatedBy                 User?                @relation("updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  usersUpdated              User[]               @relation("updatedBy")
+  deletedBy                 User?                @relation("deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  usersDeleted              User[]               @relation("deletedBy")
+  rolesCreated              Role[]               @relation("role_createdBy")
+  rolesUpdated              Role[]               @relation("role_updatedBy")
+  rolesDeleted              Role[]               @relation("role_deletedBy")
+  RoleUser                  RoleUser[]
+  AssignedRolesPermissions  PermissionRole[]
+  areasCreated              Area[]               @relation("area_createdBy")
+  areasUpdated              Area[]               @relation("area_updatedBy")
+  areasDeleted              Area[]               @relation("area_deletedBy")
+  phoneType                 PhoneType?           @relation(fields: [phone_type_id], references: [id])
+  adress                    Address?             @relation(fields: [adress_id], references: [id])
+  profilePicture            ProfilePicture?      @relation(fields: [profile_picture_id], references: [id])
+  Patient                   Patient[]
+  profilePicturesCreated    ProfilePicture[]     @relation("profile_picture_createdBy")
+  profilePicturesUpdated    ProfilePicture[]     @relation("profile_picture_updatedBy")
+  profilePicturesDeleted    ProfilePicture[]     @relation("profile_picture_deletedBy")
+  phoneTypesCreated         PhoneType[]          @relation("phone_type_createdBy")
+  phoneTypesUpdated         PhoneType[]          @relation("phone_type_updatedBy")
+  phoneTypesDeleted         PhoneType[]          @relation("phone_type_deletedBy")
+  addressesCreated          Address[]            @relation("address_createdBy")
+  addressesUpdated          Address[]            @relation("address_updatedBy")
+  addressesDeleted          Address[]            @relation("address_deletedBy")
+  patientStatusCreated      PatientStatus[]      @relation("patient_status_createdBy")
+  patientStatusUpdated      PatientStatus[]      @relation("patient_status_updatedBy")
+  patientStatusDeleted      PatientStatus[]      @relation("patient_status_deletedBy")
+  patientsCreated           Patient[]            @relation("patient_createdBy")
+  patientsUpdated           Patient[]            @relation("patient_updatedBy")
+  patientsDeleted           Patient[]            @relation("patient_deletedBy")
+  patientInformationCreated PatientInformation[] @relation("patient_information_createdBy")
+  patientInformationUpdated PatientInformation[] @relation("patient_information_updatedBy")
+  patientInformationDeleted PatientInformation[] @relation("patient_information_deletedBy")
+  documentationTypesCreated DocumentationType[]  @relation("documentation_type_createdBy")
+  documentationTypesUpdated DocumentationType[]  @relation("documentation_type_updatedBy")
+  documentationTypesDeleted DocumentationType[]  @relation("documentation_type_deletedBy")
+  documentationCreated      Documentation[]      @relation("documentation_createdBy")
+  documentationUpdated      Documentation[]      @relation("documentation_updatedBy")
+  documentationDeleted      Documentation[]      @relation("documentation_deletedBy")
+  Professional              Professional[]
+  ProfessionalArea          ProfessionalArea[]
+  professionalsCreated      Professional[]       @relation("professional_createdBy")
+  professionalsUpdated      Professional[]       @relation("professional_updatedBy")
+  professionalsDeleted      Professional[]       @relation("professional_deletedBy")
 }
 
 model Role {
@@ -98,16 +139,229 @@ model PermissionRole {
 }
 
 model Area {
+  id               Int                @id @default(autoincrement())
+  name             String
+  description      String
+  created_by       Int
+  updated_by       Int?
+  deleted_by       Int?
+  its              DateTime           @default(now())
+  uts              DateTime?
+  dts              DateTime?
+  createdBy        User               @relation("area_createdBy", fields: [created_by], references: [id])
+  updatedBy        User?              @relation("area_updatedBy", fields: [updated_by], references: [id])
+  deletedBy        User?              @relation("area_deletedBy", fields: [deleted_by], references: [id])
+  ProfessionalArea ProfessionalArea[]
+  Treatment        Treatment[]
+}
+
+model ProfilePicture {
+  id         Int       @id @default(autoincrement())
+  filename   String
+  mimetype   String    @db.VarChar(100)
+  User       User[]
+  created_by Int
+  updated_by Int?
+  deleted_by Int?
+  its        DateTime  @default(now())
+  uts        DateTime?
+  dts        DateTime?
+  createdBy  User      @relation("profile_picture_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  updatedBy  User?     @relation("profile_picture_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  deletedBy  User?     @relation("profile_picture_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model PhoneType {
+  id                    Int       @id @default(autoincrement())
+  name                  String
+  User                  User[]
+  created_by            Int
+  updated_by            Int?
+  deleted_by            Int?
+  its                   DateTime  @default(now())
+  uts                   DateTime?
+  dts                   DateTime?
+  createdBy             User      @relation("phone_type_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  updatedBy             User?     @relation("phone_type_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  deletedBy             User?     @relation("phone_type_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  patientCompanions     Patient[] @relation("patient_companion_phone_type_id")
+  patientResponsibles   Patient[] @relation("patient_responsible_phone_type_id")
+  patientPrimaryDoctors Patient[] @relation("patient_primary_doctor_phone_type_id")
+}
+
+model Address {
   id          Int       @id @default(autoincrement())
-  name        String
-  description String
+  street      String
+  height      String
+  flat_number String?
+  province    String
+  city        String
+  department  String
+  User        User[]
   created_by  Int
   updated_by  Int?
   deleted_by  Int?
   its         DateTime  @default(now())
   uts         DateTime?
   dts         DateTime?
-  createdBy   User      @relation("area_createdBy", fields: [created_by], references: [id])
-  updatedBy   User?     @relation("area_updatedBy", fields: [updated_by], references: [id])
-  deletedBy   User?     @relation("area_deletedBy", fields: [deleted_by], references: [id])
+  createdBy   User      @relation("address_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  updatedBy   User?     @relation("address_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  deletedBy   User?     @relation("address_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model PatientStatus {
+  id         Int       @id @default(autoincrement())
+  name       String
+  created_by Int
+  updated_by Int?
+  deleted_by Int?
+  its        DateTime  @default(now())
+  uts        DateTime?
+  dts        DateTime?
+  createdBy  User      @relation("patient_status_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  updatedBy  User?     @relation("patient_status_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  deletedBy  User?     @relation("patient_status_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Patient    Patient[]
+}
+
+model Patient {
+  user_id                      Int                  @id
+  patient_status_id            Int
+  companion_firstname          String?
+  companion_lastname           String?
+  companion_phone_type_id      Int?
+  companion_phone_number       String?
+  responsible_firstname        String?
+  responsible_lastname         String?
+  responsible_phone_type_id    Int?
+  responsible_phone_number     String?
+  primary_doctor_firstname     String?
+  primary_doctor_lastname      String?
+  primary_doctor_phone_type_id Int?
+  primary_doctor_phone_number  String?
+  diagnose                     String
+  diagnose_date                DateTime
+  created_by                   Int
+  updated_by                   Int?
+  deleted_by                   Int?
+  its                          DateTime             @default(now())
+  uts                          DateTime?
+  dts                          DateTime?
+  createdBy                    User                 @relation("patient_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  updatedBy                    User?                @relation("patient_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  deletedBy                    User?                @relation("patient_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user                         User                 @relation(fields: [user_id], references: [id])
+  patientStatus                PatientStatus        @relation(fields: [patient_status_id], references: [id])
+  companion_phone_type         PhoneType?           @relation("patient_companion_phone_type_id", fields: [companion_phone_type_id], references: [id])
+  responsible_phone_type       PhoneType?           @relation("patient_responsible_phone_type_id", fields: [responsible_phone_type_id], references: [id])
+  primary_doctor_phone_type    PhoneType?           @relation("patient_primary_doctor_phone_type_id", fields: [primary_doctor_phone_type_id], references: [id])
+  PatientInformation           PatientInformation[]
+  Documentation                Documentation[]
+  Treatment                    Treatment[]
+}
+
+model PatientInformation {
+  id               Int            @id @default(autoincrement())
+  patient_id       Int
+  information      String
+  documentation_id Int?
+  created_by       Int
+  updated_by       Int?
+  deleted_by       Int?
+  its              DateTime       @default(now())
+  uts              DateTime?
+  dts              DateTime?
+  createdBy        User           @relation("patient_information_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  updatedBy        User?          @relation("patient_information_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  deletedBy        User?          @relation("patient_information_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  patient          Patient        @relation(fields: [patient_id], references: [user_id])
+  documentation    Documentation? @relation(fields: [documentation_id], references: [id])
+}
+
+model DocumentationType {
+  id            Int             @id @default(autoincrement())
+  name          String
+  required      Boolean         @default(false)
+  created_by    Int
+  updated_by    Int?
+  deleted_by    Int?
+  its           DateTime        @default(now())
+  uts           DateTime?
+  dts           DateTime?
+  createdBy     User            @relation("documentation_type_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  updatedBy     User?           @relation("documentation_type_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  deletedBy     User?           @relation("documentation_type_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Documentation Documentation[]
+}
+
+model Documentation {
+  id                     Int                  @id @default(autoincrement())
+  patientUser_id         Int
+  documentationTypeId    Int?
+  otherDocumentationType String?
+  filename               String
+  mimetype               String
+  created_by             Int
+  updated_by             Int?
+  deleted_by             Int?
+  its                    DateTime             @default(now())
+  uts                    DateTime?
+  dts                    DateTime?
+  createdBy              User                 @relation("documentation_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  updatedBy              User?                @relation("documentation_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  deletedBy              User?                @relation("documentation_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  patient                Patient              @relation(fields: [patientUser_id], references: [user_id])
+  documentationType      DocumentationType?   @relation(fields: [documentationTypeId], references: [id])
+  PatientInformation     PatientInformation[]
+}
+
+model Professional {
+  user_id                Int                @id
+  profession             String
+  speciality             String
+  medical_license_number String
+  created_by             Int
+  updated_by             Int?
+  deleted_by             Int?
+  its                    DateTime           @default(now())
+  uts                    DateTime?
+  dts                    DateTime?
+  createdBy              User               @relation("professional_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  updatedBy              User?              @relation("professional_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  deletedBy              User?              @relation("professional_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user                   User               @relation(fields: [user_id], references: [id])
+  ProfessionalArea       ProfessionalArea[]
+  Appointment            Appointment[]
+}
+
+model ProfessionalArea {
+  professional_id Int
+  area_id         Int
+  its             DateTime     @default(now())
+  created_by      Int
+  createdBy       User         @relation(fields: [created_by], references: [id])
+  professional    Professional @relation(fields: [professional_id], references: [user_id])
+  area            Area         @relation(fields: [area_id], references: [id])
+
+  @@id([area_id, professional_id])
+}
+
+model Treatment {
+  id          Int           @id @default(autoincrement())
+  area_id     Int
+  quantity    Int
+  patient_id  Int
+  area        Area          @relation(fields: [area_id], references: [id])
+  patient     Patient       @relation(fields: [patient_id], references: [user_id])
+  Appointment Appointment[]
+}
+
+model Appointment {
+  id              Int          @id @default(autoincrement())
+  treatment_id    Int
+  professional_id Int
+  start_date      DateTime
+  end_date        DateTime
+  treatment       Treatment    @relation(fields: [treatment_id], references: [id])
+  professional    Professional @relation(fields: [professional_id], references: [user_id])
 }

@@ -6,6 +6,8 @@ export class UpdateAreaInput extends OmitType(PartialType(AreaCreateInput), [
   'createdBy',
   'deletedBy',
   'updatedBy',
+  'ProfessionalArea',
+  'Treatment',
   'its',
   'uts',
   'dts',

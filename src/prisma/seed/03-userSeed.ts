@@ -8,8 +8,8 @@ const seedUsers = async (prisma: PrismaClient) => {
     email: 'ADMIN',
     firstname: 'Admin',
     lastname: 'Admin',
-    phone: '',
     password: 'NOTACCESS', // queda a criterio del desarrollador reemplazar los valores para acceder
+    birth_date: new Date(),
   };
 
   const dbAdminUser = await prisma.user.findFirst({

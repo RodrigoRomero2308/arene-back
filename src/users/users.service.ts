@@ -42,11 +42,8 @@ export class UsersService {
     return;
   };
 
-  registerUser = async (_registerDto: RegisterUserDTO) => {
-    await this.validateRegister(_registerDto);
-    const registerDto = JSON.parse(
-      JSON.stringify(_registerDto),
-    ) as RegisterUserDTO;
+  registerUser = async (registerDto: RegisterUserDTO) => {
+    await this.validateRegister(registerDto);
     registerDto.password = await this.hashService.hash(registerDto.password);
     const createdUser = await this.prismaService.user.create({
       data: {
