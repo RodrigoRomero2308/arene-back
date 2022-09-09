@@ -31,6 +31,7 @@ import { RoleModule } from './role/role.module';
         return {
           autoSchemaFile: true,
           cors: corsConfig,
+          persistedQueries: false,
           context: ({ req, res }) => ({ req, res }),
           playground: {
             settings: {
