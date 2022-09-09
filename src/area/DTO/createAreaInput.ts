@@ -6,6 +6,8 @@ export class CreateAreaInput extends OmitType(AreaCreateInput, [
   'createdBy',
   'deletedBy',
   'updatedBy',
+  'ProfessionalArea',
+  'Treatment',
   'its',
   'uts',
   'dts',

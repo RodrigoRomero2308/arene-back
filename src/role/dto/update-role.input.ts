@@ -6,6 +6,7 @@ export class UpdateRoleInput extends OmitType(
   PartialType(RoleUncheckedCreateInput),
   [
     'PermissionRole',
+    'RoleUser',
     'created_by',
     'deleted_by',
     'updated_by',
