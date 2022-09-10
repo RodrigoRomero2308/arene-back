@@ -1,14 +1,5 @@
-import { AreaCreateInput } from '@/prisma-models/area/area-create.input';
-import { InputType, OmitType, PartialType } from '@nestjs/graphql';
+import { InputType, PartialType } from '@nestjs/graphql';
+import { CreateAreaInput } from './createAreaInput';
 
 @InputType()
-export class UpdateAreaInput extends OmitType(PartialType(AreaCreateInput), [
-  'createdBy',
-  'deletedBy',
-  'updatedBy',
-  'ProfessionalArea',
-  'Treatment',
-  'its',
-  'uts',
-  'dts',
-]) {}
+export class UpdateAreaInput extends PartialType(CreateAreaInput) {}
