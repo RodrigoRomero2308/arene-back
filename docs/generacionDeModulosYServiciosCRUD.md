@@ -62,27 +62,21 @@ Nos deberia saltar que se crearon archivos para el modulo en una carpeta segun e
 Nest nos generara un archivo de module, un resolver y un service para el modulo, ademas de 2 DTOs, uno de creacion y uno de actualizacion.
 <br>
 <br>
-Lo primero que haremos sera borrar la carpeta entity, ya que Prisma nos da los modelos de entidad, luego pasaremos a modificar los dtos para usar uno de los modelos generados por prisma. Esta el ejemplo en el modulo de area. Nos deberia quedar algo como esto:
+Lo primero que haremos sera borrar la carpeta entity, ya que Prisma nos da los modelos de entidad, luego pasaremos a modificar los dtos para usar uno de los modelos generados por prisma. Esta el ejemplo en el modulo de area. Nos deberia quedar algo como esto, nos guiamos por el schema.prisma:
 
 ```javascript
 @InputType()
-export class CreateRoleInput extends OmitType(RoleUncheckedCreateInput, [
-  'created_by',
-  'deleted_by',
-  'updated_by',
-  'its',
-  'uts',
-  'dts',
-  'isSystemRole',
-  'RoleUser',
-  'PermissionRole',
-]) {}
+export class CreateAreaInput {
+  @Field(() => String)
+  @IsNotEmpty()
+  name: string;
+  @Field(() => String)
+  @IsNotEmpty()
+  description: string;
+}
 ```
 
-Con `OmitType` basicamente estamos generando un nuevo tipo a partir el primer parametro, omitiendo ciertas propiedades. Entre las propiedades que siempre debemos excluir de estos dtos tenemos:
-
-- created_by, updated_by, deleted_by, its, uts, dts: son propiedades que se utilizan para saber quien creo, modifico y elimino las entidades y saber cuando ocurrio.
-- Todos los campos que refieran a relaciones en el modelo de prisma (Veran que el tipo en el modelo no es primitivo, por ejemplo RoleUser)
+Es importante que se realicen las validaciones pertinentes para que los datos sean congruentes, por ejemplo aqui usamos `IsNotEmpty` de `class-validator`
 
 Una vez que tengamos los DTOs modificados, debemos modificar los resolvers para que usen estos dtos en lugar de los viejos, pero ademas debemos ponerles las guards segun si es requerido controlar si es necesario control de acceso o de permisos. Pueden leer mas sobre eso [aqui](./permissionBasedAccessControl.md)
 <br>

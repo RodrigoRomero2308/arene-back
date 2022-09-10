@@ -187,6 +187,7 @@ model PhoneType {
   patientCompanions     Patient[] @relation("patient_companion_phone_type_id")
   patientResponsibles   Patient[] @relation("patient_responsible_phone_type_id")
   patientPrimaryDoctors Patient[] @relation("patient_primary_doctor_phone_type_id")
+  Patient               Patient[]
 }
 
 model Address {
@@ -241,6 +242,11 @@ model Patient {
   primary_doctor_phone_number  String?
   diagnose                     String
   diagnose_date                DateTime
+  needs_transfer               Boolean              @default(false)
+  transfer                     String?
+  transfer_responsible         String?
+  transfer_phone_type_id       Int?
+  transfer_phone_number        String?
   created_by                   Int
   updated_by                   Int?
   deleted_by                   Int?
@@ -255,6 +261,7 @@ model Patient {
   companion_phone_type         PhoneType?           @relation("patient_companion_phone_type_id", fields: [companion_phone_type_id], references: [id])
   responsible_phone_type       PhoneType?           @relation("patient_responsible_phone_type_id", fields: [responsible_phone_type_id], references: [id])
   primary_doctor_phone_type    PhoneType?           @relation("patient_primary_doctor_phone_type_id", fields: [primary_doctor_phone_type_id], references: [id])
+  transfer_phone_type          PhoneType?           @relation(fields: [transfer_phone_type_id], references: [id])
   PatientInformation           PatientInformation[]
   Documentation                Documentation[]
   Treatment                    Treatment[]
