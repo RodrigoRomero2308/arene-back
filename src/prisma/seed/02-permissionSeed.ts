@@ -49,6 +49,16 @@ const seedPermissions = async (prisma: PrismaClient) => {
       shortname: 'Administrate Areas',
       description: 'Permission needed to access areas admin page',
     },
+    {
+      code: PermissionCodes.RoleUserCreate,
+      shortname: 'RoleUser Create',
+      description: 'Permission to create RoleUsers',
+    },
+    {
+      code: PermissionCodes.RoleUserDelete,
+      shortname: 'RoleUser Delete',
+      description: 'Permission to delete RoleUsers',
+    },
   ];
 
   const dbPermissions = await prisma.permission.findMany();
