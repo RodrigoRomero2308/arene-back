@@ -13,7 +13,6 @@ import { getCorsConfig } from '@/utils/cors.utils';
 import { PermissionModule } from '@/permission/permission.module';
 import { AreaModule } from '@/area/area.module';
 import { RoleModule } from './role/role.module';
-import { PatientModule } from './patient/patient.module';
 
 @Module({
   imports: [
@@ -49,7 +48,6 @@ import { PatientModule } from './patient/patient.module';
     PermissionModule,
     AreaModule,
     RoleModule,
-    PatientModule,
   ],
   controllers: [AppController],
   providers: [AppService],
