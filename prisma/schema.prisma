@@ -52,6 +52,8 @@ model User {
   rolesUpdated              Role[]               @relation("role_updatedBy")
   rolesDeleted              Role[]               @relation("role_deletedBy")
   RoleUser                  RoleUser[]
+  roleUserCreated           RoleUser[]           @relation("roleUser_createdBy")
+  roleUserDeleted           RoleUser[]           @relation("roleUser_deletedBy")
   AssignedRolesPermissions  PermissionRole[]
   areasCreated              Area[]               @relation("area_createdBy")
   areasUpdated              Area[]               @relation("area_updatedBy")
@@ -110,11 +112,16 @@ model Role {
 }
 
 model RoleUser {
-  user User @relation(fields: [userId], references: [id])
-  role Role @relation(fields: [roleId], references: [id])
-
-  userId Int
-  roleId Int
+  user       User      @relation(fields: [userId], references: [id])
+  role       Role      @relation(fields: [roleId], references: [id])
+  userId     Int
+  roleId     Int
+  its        DateTime  @default(now())
+  dts        DateTime?
+  created_by Int? 
+  deleted_by Int?
+  createdBy  User?     @relation("roleUser_createdBy", fields: [created_by], references: [id])
+  deletedBy  User?     @relation("roleUser_deletedBy", fields: [deleted_by], references: [id])
 
   @@id([userId, roleId])
 }
