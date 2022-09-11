@@ -49,6 +49,21 @@ const seedPermissions = async (prisma: PrismaClient) => {
       shortname: 'Administrate Areas',
       description: 'Permission needed to access areas admin page',
     },
+    {
+      code: PermissionCodes.PatientRead,
+      shortname: 'Patient Read',
+      description: 'Permission to read patient data',
+    },
+    {
+      code: PermissionCodes.PatientCreate,
+      shortname: 'Patient Create',
+      description: 'Permission to create patients',
+    },
+    {
+      code: PermissionCodes.PatientUpdate,
+      shortname: 'Patient Update',
+      description: 'Permission to update patients',
+    },
   ];
 
   const dbPermissions = await prisma.permission.findMany();

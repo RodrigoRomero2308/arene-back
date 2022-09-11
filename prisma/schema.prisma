@@ -24,8 +24,8 @@ datasource db {
 
 model User {
   id                        Int                  @id @default(autoincrement())
-  dni                       String               @unique
-  email                     String               @unique
+  dni                       String
+  email                     String
   firstname                 String
   lastname                  String
   /// @HideField()

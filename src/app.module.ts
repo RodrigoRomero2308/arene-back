@@ -39,6 +39,9 @@ import { PatientModule } from './patient/patient.module';
               'request.credentials': 'include', // Permite que la sesion se guarde como cookie cuando se usa el playground
             },
           },
+          buildSchemaOptions: {
+            numberScalarMode: 'integer',
+          },
         };
       },
     }),
