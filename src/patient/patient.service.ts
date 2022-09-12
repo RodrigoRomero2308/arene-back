@@ -24,7 +24,7 @@ export class PatientService {
     return this.prismaService.patient.findFirst({
       where: {
         user_id: id,
-        OR: [
+        AND: [
           {
             dts: null,
           },
@@ -41,6 +41,18 @@ export class PatientService {
 
   getList() {
     return this.prismaService.patient.findMany({
+      where: {
+        AND: [
+          {
+            dts: null,
+          },
+          {
+            user: {
+              dts: null,
+            },
+          },
+        ],
+      },
       include: this.include,
     });
   }
