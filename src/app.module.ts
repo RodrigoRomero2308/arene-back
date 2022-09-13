@@ -10,11 +10,10 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ScalarsModule } from '@/graphql/scalars/scalar.module';
 import { getCorsConfig } from '@/utils/cors.utils';
-import { PermissionModule } from '@/permission/permission.module';
 import { AreaModule } from '@/area/area.module';
 import { RoleModule } from './role/role.module';
 import { RoleUserModule } from './role-user/role-user.module';
-import { ProfessionalModule } from './professional/professional.module';
+import { PatientModule } from './patient/patient.module';
 
 @Module({
   imports: [
@@ -40,6 +39,9 @@ import { ProfessionalModule } from './professional/professional.module';
               'request.credentials': 'include', // Permite que la sesion se guarde como cookie cuando se usa el playground
             },
           },
+          buildSchemaOptions: {
+            numberScalarMode: 'integer',
+          },
         };
       },
     }),
@@ -48,7 +50,7 @@ import { ProfessionalModule } from './professional/professional.module';
     AreaModule,
     RoleModule,
     RoleUserModule,
-    ProfessionalModule,
+    PatientModule,
   ],
   controllers: [AppController],
   providers: [AppService],

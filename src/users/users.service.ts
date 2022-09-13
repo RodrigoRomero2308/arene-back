@@ -21,18 +21,48 @@ export class UsersService {
     return this.prismaService.user.findMany(findManyArgs);
   };
 
-  private validateRegister = async (registerDTO: CreateUserInput) => {
+  validateRegister = async (
+    input: {
+      dni: string;
+      email: string;
+    },
+    options: {
+      excludeUserId?: number;
+      excludeDni?: boolean;
+      excludeEmail?: boolean;
+    } = {},
+  ) => {
     /* Aca realizaremos controles por ejemplo si ya existe un usuario con el dni o email que se esta queriendo usar para registrarse */
-    const alreadyExistingUser = await this.findOne({
-      OR: [
-        {
-          dni: registerDTO.dni,
-        },
-        {
-          email: registerDTO.email,
-        },
-      ],
-    });
+    const userFilter: Prisma.UserWhereInput[] = [];
+
+    if (!options.excludeDni) {
+      userFilter.push({
+        dni: input.dni,
+        dts: null,
+      });
+    }
+
+    if (!options.excludeEmail) {
+      userFilter.push({
+        email: input.email,
+        dts: null,
+      });
+    }
+
+    let alreadyExistingUser: number | undefined;
+
+    if (userFilter.length) {
+      const queryResult = await this.findOne({
+        OR: userFilter,
+        AND: [
+          {
+            id: options.excludeUserId,
+          },
+        ],
+      });
+
+      alreadyExistingUser = queryResult?.id;
+    }
 
     if (alreadyExistingUser) {
       throw new InternalServerErrorException({
