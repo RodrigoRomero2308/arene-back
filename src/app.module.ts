@@ -13,6 +13,7 @@ import { getCorsConfig } from '@/utils/cors.utils';
 import { PermissionModule } from '@/permission/permission.module';
 import { AreaModule } from '@/area/area.module';
 import { RoleModule } from './role/role.module';
+import { PatientModule } from './patient/patient.module';
 import { RoleUserModule } from './role-user/role-user.module';
 import { ProfessionalModule } from './professional/professional.module';
 
@@ -40,6 +41,9 @@ import { ProfessionalModule } from './professional/professional.module';
               'request.credentials': 'include', // Permite que la sesion se guarde como cookie cuando se usa el playground
             },
           },
+          buildSchemaOptions: {
+            numberScalarMode: 'integer',
+          },
         };
       },
     }),
@@ -47,6 +51,7 @@ import { ProfessionalModule } from './professional/professional.module';
     PermissionModule,
     AreaModule,
     RoleModule,
+    PatientModule,
     RoleUserModule,
     ProfessionalModule,
   ],

@@ -60,6 +60,21 @@ const seedPermissions = async (prisma: PrismaClient) => {
       description: 'Permission to delete RoleUsers',
     },
     {
+      code: PermissionCodes.PatientRead,
+      shortname: 'Patient Read',
+      description: 'Permission to read patient data',
+    },
+    {
+      code: PermissionCodes.PatientCreate,
+      shortname: 'Patient Create',
+      description: 'Permission to create patients',
+    },
+    {
+      code: PermissionCodes.PatientUpdate,
+      shortname: 'Patient Update',
+      description: 'Permission to update patients',
+    },
+    {
       code: PermissionCodes.ProfessionalCreate,
       shortname: 'Professional Create',
       description: 'Permission to create professional',

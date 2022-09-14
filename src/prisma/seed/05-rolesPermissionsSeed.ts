@@ -98,6 +98,32 @@ const seedRolePermissions = async (prisma: PrismaClient) => {
       permissionCode: PermissionCodes.RoleUserDelete,
     },
     {
+      roleNames: [
+        SystemRoles.Administrador,
+        SystemRoles.Director,
+        SystemRoles.Coordinador,
+      ],
+      permissionCode: PermissionCodes.PatientCreate,
+    },
+    {
+      roleNames: [
+        SystemRoles.Administrador,
+        SystemRoles.Director,
+        SystemRoles.Coordinador,
+      ],
+      permissionCode: PermissionCodes.PatientUpdate,
+    },
+    {
+      roleNames: [
+        SystemRoles.Administrador,
+        SystemRoles.Director,
+        SystemRoles.Coordinador,
+        SystemRoles.Fisiatra,
+        SystemRoles.Profesional,
+      ],
+      permissionCode: PermissionCodes.PatientRead,
+    },
+    {
       roleNames: [SystemRoles.Director],
       permissionCode: PermissionCodes.ProfessionalCreate,
     },
