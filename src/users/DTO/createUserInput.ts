@@ -14,6 +14,12 @@ export class CreateUserInput {
   @Field()
   @IsNotEmpty()
   firstname: string;
+  @Field({ nullable: true })
+  @IsNotEmpty()
+  gender?: string;
+  @Field({ nullable: true })
+  @IsNotEmpty()
+  marital_status?: string;
   @Field()
   @IsNotEmpty()
   lastname: string;

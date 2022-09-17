@@ -35,6 +35,8 @@ model User {
   its                       DateTime             @default(now())
   uts                       DateTime?
   dts                       DateTime?
+  gender                    String?
+  marital_status            String?
   created_by                Int?
   updated_by                Int?
   deleted_by                Int?
@@ -118,7 +120,7 @@ model RoleUser {
   roleId     Int
   its        DateTime  @default(now())
   dts        DateTime?
-  created_by Int? 
+  created_by Int?
   deleted_by Int?
   createdBy  User?     @relation("roleUser_createdBy", fields: [created_by], references: [id])
   deletedBy  User?     @relation("roleUser_deletedBy", fields: [deleted_by], references: [id])
