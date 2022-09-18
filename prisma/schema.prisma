@@ -61,7 +61,7 @@ model User {
   areasUpdated              Area[]               @relation("area_updatedBy")
   areasDeleted              Area[]               @relation("area_deletedBy")
   phoneType                 PhoneType?           @relation(fields: [phone_type_id], references: [id])
-  adress                    Address?             @relation(fields: [adress_id], references: [id])
+  address                   Address?             @relation(fields: [adress_id], references: [id])
   profilePicture            ProfilePicture?      @relation(fields: [profile_picture_id], references: [id])
   Patient                   Patient[]
   profilePicturesCreated    ProfilePicture[]     @relation("profile_picture_createdBy")
@@ -208,13 +208,13 @@ model Address {
   city        String
   department  String
   User        User[]
-  created_by  Int
+  created_by  Int?
   updated_by  Int?
   deleted_by  Int?
   its         DateTime  @default(now())
   uts         DateTime?
   dts         DateTime?
-  createdBy   User      @relation("address_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  createdBy   User?     @relation("address_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   updatedBy   User?     @relation("address_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   deletedBy   User?     @relation("address_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }

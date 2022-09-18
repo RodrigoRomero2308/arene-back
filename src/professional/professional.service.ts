@@ -59,7 +59,7 @@ export class ProfessionalService {
   async create(input: CreateProfessionalInput, userId: number) {
     await this.usersService.validateRegister(input);
     input.password = await this.hashService.hash(input.password);
-    const { professional, ...createUserInput } = input;
+    const { professional, address, phone_type_id, ...createUserInput } = input;
 
     const professionalRole = await this.prismaService.role.findFirst({
       where: {
@@ -79,7 +79,11 @@ export class ProfessionalService {
       data: {
         ...createUserInput,
         active: true,
-        created_by: userId,
+        createdBy: {
+          connect: {
+            id: userId,
+          },
+        },
         Professional: {
           create: {
             profession: professional.profession,
@@ -93,6 +97,21 @@ export class ProfessionalService {
             roleId: professionalRole.id,
           },
         },
+        address: address
+          ? {
+              create: {
+                ...address,
+                created_by: userId,
+              },
+            }
+          : undefined,
+        phoneType: phone_type_id
+          ? {
+              connect: {
+                id: phone_type_id,
+              },
+            }
+          : undefined,
       },
       select: {
         id: true,
@@ -119,13 +138,17 @@ export class ProfessionalService {
       input.password = await this.hashService.hash(input.password);
     }
 
-    const { professional, ...updateUserInput } = input;
+    const { professional, address, phone_type_id, ...updateUserInput } = input;
 
     await this.prismaService.user.update({
       data: {
         ...updateUserInput,
         uts: new Date(),
-        updated_by: userId,
+        updatedBy: {
+          connect: {
+            id: userId,
+          },
+        },
         Professional: {
           update: {
             where: {
@@ -138,6 +161,22 @@ export class ProfessionalService {
             },
           },
         },
+        address: address
+          ? {
+              update: {
+                ...address,
+                updated_by: userId,
+                uts: new Date(),
+              },
+            }
+          : undefined,
+        phoneType: phone_type_id
+          ? {
+              connect: {
+                id: phone_type_id,
+              },
+            }
+          : undefined,
       },
       where: {
         id: id,

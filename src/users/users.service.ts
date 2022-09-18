@@ -75,10 +75,27 @@ export class UsersService {
   registerUser = async (registerDto: CreateUserInput) => {
     await this.validateRegister(registerDto);
     registerDto.password = await this.hashService.hash(registerDto.password);
+    const { address, phone_type_id, ...createUserInput } = registerDto;
     const createdUser = await this.prismaService.user.create({
       data: {
-        ...registerDto,
+        ...createUserInput,
         active: true,
+        ...{
+          address: address
+            ? {
+                create: {
+                  ...address,
+                },
+              }
+            : undefined,
+        },
+        phoneType: phone_type_id
+          ? {
+              connect: {
+                id: phone_type_id,
+              },
+            }
+          : undefined,
       },
     });
     return createdUser;
