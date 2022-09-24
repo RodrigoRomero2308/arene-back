@@ -6,6 +6,7 @@ import { UsersService } from '@/users/users.service';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { CreatePatientInput } from './DTO/createPatientInput';
+import { PatientFilter } from './DTO/patient.filter';
 import { UpdatePatientInput } from './DTO/updatePatientInput';
 
 @Injectable()
@@ -39,7 +40,63 @@ export class PatientService {
     });
   }
 
-  getList() {
+  private getPrismaParameters({ filter = {} }: { filter?: PatientFilter }) {
+    const filtersToApply: Prisma.PatientWhereInput[] = [];
+
+    const { dni, email, name } = filter;
+
+    if (dni)
+      filtersToApply.push({
+        user: {
+          dni: {
+            contains: dni,
+          },
+        },
+      });
+
+    if (email)
+      filtersToApply.push({
+        user: {
+          email: {
+            contains: email,
+          },
+        },
+      });
+
+    if (name)
+      filtersToApply.push({
+        user: {
+          OR: [
+            {
+              firstname: {
+                contains: name,
+              },
+            },
+            {
+              lastname: {
+                contains: name,
+              },
+            },
+          ],
+        },
+      });
+
+    return filtersToApply;
+  }
+
+  getList({
+    filter,
+    skip,
+    take,
+  }: {
+    filter?: PatientFilter;
+    skip?: number;
+    take?: number;
+  }) {
+    const whereFilters = this.getPrismaParameters({
+      filter,
+    });
+
     return this.prismaService.patient.findMany({
       where: {
         AND: [
@@ -51,9 +108,12 @@ export class PatientService {
               dts: null,
             },
           },
+          ...whereFilters,
         ],
       },
       include: this.include,
+      skip,
+      take,
     });
   }
 
