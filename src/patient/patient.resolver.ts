@@ -1,4 +1,5 @@
 import { IsAuthenticatedGuard } from '@/auth/session.guard';
+import { PaginationArgs } from '@/common/pagination.args';
 import { RequiredPermissions } from '@/decorators/permission.decorator';
 import { CurrentUser } from '@/decorators/user.decorator';
 import { PermissionCodes } from '@/enums/permissionCodes.enum';
@@ -8,6 +9,7 @@ import { AuthenticatedUser } from '@/users/entity/authenticated.user.model';
 import { UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreatePatientInput } from './DTO/createPatientInput';
+import { PatientFilter } from './DTO/patient.filter';
 import { UpdatePatientInput } from './DTO/updatePatientInput';
 import { PatientService } from './patient.service';
 
@@ -18,8 +20,11 @@ export class PatientResolver {
   @Query(() => [Patient])
   @RequiredPermissions(PermissionCodes.PatientRead)
   @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
-  async getPatients() {
-    return this.patientService.getList();
+  async getPatients(
+    @Args() { skip, take }: PaginationArgs,
+    @Args('filter', { nullable: true }) filter?: PatientFilter,
+  ) {
+    return this.patientService.getList({ filter, skip, take });
   }
 
   @Query(() => Patient, {
