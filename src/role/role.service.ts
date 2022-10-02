@@ -15,7 +15,11 @@ export class RoleService {
   }
 
   getRoles() {
-    return this.prismaService.role.findMany();
+    return this.prismaService.role.findMany({
+      where: {
+        dts: null,
+      },
+    });
   }
 
   async checkRoleName({
