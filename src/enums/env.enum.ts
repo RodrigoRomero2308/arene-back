@@ -7,4 +7,5 @@ export enum EnvironmentVariable {
   CORS_REG_EXP = 'CORS_REG_EXP',
   CORS_URL = 'CORS_URL',
   REDIS_URL = 'REDIS_URL',
+  GOOGLE_SERVICE_ACCOUNT = 'GOOGLE_SERVICE_ACCOUNT',
 }
