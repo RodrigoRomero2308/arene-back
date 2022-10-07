@@ -1,38 +1,63 @@
 import { PrismaService } from '@/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { CreateTreatmentInput } from './dto/create-treatment.input';
+import { TreatmentFilter } from './dto/treatment.filter';
 import { UpdateTreatmentInput } from './dto/update-treatment.input';
 
 @Injectable()
 export class TreatmentService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  findById(id: number) {
-    return this.prismaService.treatment.findFirst({
-      where: {
+  private include: Prisma.TreatmentInclude = {
+    area: true,
+    patient: true,
+  };
+
+  private getPrismaParameters({ filter = {} }: { filter?: TreatmentFilter }) {
+    const filtersToApply: Prisma.TreatmentWhereInput[] = [];
+
+    const { id, area_id, patient_id } = filter;
+
+    if (id)
+      filtersToApply.push({
         id,
-      },
-    });
+      });
+
+    if (area_id)
+      filtersToApply.push({
+        area_id,
+      });
+
+    if (patient_id)
+      filtersToApply.push({
+        patient_id,
+      });
+
+    return filtersToApply;
   }
 
-  findByUserId(userId: number) {
+  getList({
+    filter,
+    skip,
+    take,
+  }: {
+    filter?: TreatmentFilter;
+    skip?: number;
+    take?: number;
+  }) {
+    const whereFilters = this.getPrismaParameters({
+      filter,
+    });
+
     return this.prismaService.treatment.findMany({
       where: {
-        patient_id: userId,
+        AND: whereFilters,
       },
+      include: this.include,
+      skip,
+      take,
     });
-  }
-
-  findByAreaId(areaId: number) {
-    return this.prismaService.treatment.findMany({
-      where: {
-        area_id: areaId,
-      },
-    });
-  }
-
-  getList() {
-    return this.prismaService.treatment.findMany();
   }
 
   async checkTreatmentExistence(areaid: number, patientId: number) {
@@ -59,10 +84,6 @@ export class TreatmentService {
   }
 
   async update(id: number, input: UpdateTreatmentInput) {
-    if (input.area_id && input.patient_id) {
-      await this.checkTreatmentExistence(input.area_id, input.patient_id);
-    }
-
     return this.prismaService.treatment.update({
       where: {
         id,

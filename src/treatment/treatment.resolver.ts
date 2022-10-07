@@ -10,54 +10,21 @@ import { AuthenticatedUser } from '@/users/entity/authenticated.user.model';
 import { PermissionCodes } from '@/enums/permissionCodes.enum';
 import { RequiredPermissions } from '@/decorators/permission.decorator';
 import { PermissionsGuard } from '@/guards/permission.guard';
+import { PaginationArgs } from '@/common/pagination.args';
+import { TreatmentFilter } from './dto/treatment.filter';
 
 @Resolver(() => Treatment)
 export class TreatmentResolver {
   constructor(private readonly treatmentService: TreatmentService) {}
 
   @Query(() => [Treatment])
-  @UseGuards(IsAuthenticatedGuard)
-  async getTreatments() {
-    return this.treatmentService.getList();
-  }
-
-  @Query(() => Treatment, {
-    nullable: true,
-  })
-  @UseGuards(IsAuthenticatedGuard)
-  async getTreatmentById(
-    @Args('id', {
-      type: () => Int,
-    })
-    id: number,
+  @RequiredPermissions(PermissionCodes.TreatmentRead)
+  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
+  async getTreatments(
+    @Args() { skip, take }: PaginationArgs,
+    @Args('filter', { nullable: true }) filter?: TreatmentFilter,
   ) {
-    return this.treatmentService.findById(id);
-  }
-
-  @Query(() => [Treatment], {
-    nullable: true,
-  })
-  @UseGuards(IsAuthenticatedGuard)
-  async getTreatmentsByUserId(
-    @Args('id', {
-      type: () => Int,
-    })
-    id: number,
-  ) {
-    return this.treatmentService.findByUserId(id);
-  }
-
-  @Query(() => [Treatment], {
-    nullable: true,
-  })
-  @UseGuards(IsAuthenticatedGuard)
-  async getTreatmentsByAreaId(
-    @Args('id', {
-      type: () => Int,
-    })
-    id: number,
-  ) {
-    return this.treatmentService.findByAreaId(id);
+    return this.treatmentService.getList({ filter, skip, take });
   }
 
   @Mutation(() => Treatment)

@@ -20,3 +20,4 @@ Una vez que tenemos todo listo, debemos ejecutar `npm start` para arrancar el se
 - Como agregar datos a la base de datos, y preparar scripts de datos iniciales: [Seeding](docs/seeding.md)
 - Como funciona el acceso basado en permisos: [Permission Based Access Control](docs/permissionBasedAccessControl.md)
 - Guía de desarrollo de un CRUD basico en el proyecto: [CRUD Documentation](docs/generacionDeModulosYServiciosCRUD.md)
+- Como configurar la api de Google Drive: [Google API](docs/googleApi.md)
