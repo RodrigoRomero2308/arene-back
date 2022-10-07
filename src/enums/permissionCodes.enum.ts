@@ -17,4 +17,8 @@ export enum PermissionCodes {
   ProfessionalDelete = 'PROFESSIONAL_D',
   ProfessionalUpdate = 'PROFESSIONAL_U',
   ProfessionalRead = 'PROFESSIONAL_R',
+  TreatmentCreate = 'TREATMENT_C',
+  TreatmentUpdate = 'TREATMENT_U',
+  TreatmentDelete = 'TREATMENT_D',
+  TreatmentRead = 'TREATMENT_R',
 }
