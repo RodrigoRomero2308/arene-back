@@ -17,6 +17,7 @@ import { PatientModule } from './patient/patient.module';
 import { RoleUserModule } from './role-user/role-user.module';
 import { ProfessionalModule } from './professional/professional.module';
 import { TreatmentModule } from './treatment/treatment.module';
+import { FileManagementModule } from './file-management/file-management.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { TreatmentModule } from './treatment/treatment.module';
     RoleUserModule,
     ProfessionalModule,
     TreatmentModule,
+    FileManagementModule,
   ],
   controllers: [AppController],
   providers: [AppService],
