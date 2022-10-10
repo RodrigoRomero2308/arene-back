@@ -256,6 +256,15 @@ model Patient {
   transfer_responsible         String?
   transfer_phone_type_id       Int?
   transfer_phone_number        String?
+  cud_number                   String?
+  cud_companion                Boolean?
+  cud_valid_from               String?
+  cud_valid_to                 String?
+  social_work                  String?
+  social_work_plan             String?
+  social_work_number           String?
+  social_work_valid_from       String?
+  social_work_valid_to         String?
   created_by                   Int
   updated_by                   Int?
   deleted_by                   Int?
