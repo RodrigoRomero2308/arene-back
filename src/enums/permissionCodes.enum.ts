@@ -18,4 +18,6 @@ export enum PermissionCodes {
   ProfessionalDelete = 'PROFESSIONAL_D',
   ProfessionalUpdate = 'PROFESSIONAL_U',
   ProfessionalRead = 'PROFESSIONAL_R',
+  DocumentationRead = 'DOCUMENTATION_R',
+  DocumentationCreate = 'DOCUMENTATION_C',
 }

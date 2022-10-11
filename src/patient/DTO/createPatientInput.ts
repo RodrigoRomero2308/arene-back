@@ -40,8 +40,8 @@ export class CreatePatientWithoutUserInput {
   @Field()
   @IsNotEmpty()
   diagnose: string;
-  @Field(() => Date)
-  diagnose_date: Date;
+  @Field()
+  diagnose_date: string;
   @Field()
   needs_transfer: boolean;
   @Field({ nullable: true })
@@ -55,6 +55,24 @@ export class CreatePatientWithoutUserInput {
   @Field({ nullable: true })
   @IsNotEmpty()
   transfer_phone_number?: string;
+  @Field({ nullable: true })
+  cud_number?: string;
+  @Field({ nullable: true })
+  cud_companion?: boolean;
+  @Field({ nullable: true })
+  cud_valid_from?: string;
+  @Field({ nullable: true })
+  cud_valid_to?: string;
+  @Field({ nullable: true })
+  social_work?: string;
+  @Field({ nullable: true })
+  social_work_plan?: string;
+  @Field({ nullable: true })
+  social_work_number?: string;
+  @Field({ nullable: true })
+  social_work_valid_from?: string;
+  @Field({ nullable: true })
+  social_work_valid_to?: string;
 }
 
 @InputType()
