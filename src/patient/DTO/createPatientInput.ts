@@ -40,8 +40,8 @@ export class CreatePatientWithoutUserInput {
   @Field()
   @IsNotEmpty()
   diagnose: string;
-  @Field(() => Date)
-  diagnose_date: Date;
+  @Field()
+  diagnose_date: string;
   @Field()
   needs_transfer: boolean;
   @Field({ nullable: true })

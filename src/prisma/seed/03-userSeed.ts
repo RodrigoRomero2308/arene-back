@@ -2,6 +2,7 @@ import { Prisma, PrismaClient } from '@prisma/client';
 
 const seedUsers = async (prisma: PrismaClient) => {
   console.log('Seeding users...');
+  const now = new Date();
   const adminUser: Prisma.UserCreateInput = {
     dni: 'ADMIN',
     active: true,
@@ -9,7 +10,7 @@ const seedUsers = async (prisma: PrismaClient) => {
     firstname: 'Admin',
     lastname: 'Admin',
     password: 'NOTACCESS', // queda a criterio del desarrollador reemplazar los valores para acceder
-    birth_date: new Date(),
+    birth_date: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
   };
 
   const dbAdminUser = await prisma.user.findFirst({

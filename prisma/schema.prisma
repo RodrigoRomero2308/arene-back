@@ -31,7 +31,7 @@ model User {
   /// @HideField()
   password                  String
   active                    Boolean
-  birth_date                DateTime             @db.Date
+  birth_date                String
   its                       DateTime             @default(now())
   uts                       DateTime?
   dts                       DateTime?
@@ -250,7 +250,7 @@ model Patient {
   primary_doctor_phone_type_id Int?
   primary_doctor_phone_number  String?
   diagnose                     String
-  diagnose_date                DateTime
+  diagnose_date                String
   needs_transfer               Boolean              @default(false)
   transfer                     String?
   transfer_responsible         String?

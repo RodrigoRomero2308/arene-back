@@ -27,8 +27,8 @@ export class CreateOnlyUserInput {
   @Field()
   @IsNotEmpty()
   password: string;
-  @Field(() => Date)
-  birth_date: Date;
+  @Field()
+  birth_date: string;
   @Field({ nullable: true })
   phone_type_id?: number;
   @Field({ nullable: true })

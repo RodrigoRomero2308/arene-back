@@ -18,7 +18,11 @@ export class PatientService {
   ) {}
 
   private include: Prisma.PatientInclude = {
-    user: true,
+    user: {
+      include: {
+        address: true,
+      },
+    },
   };
 
   findById(id: number) {
