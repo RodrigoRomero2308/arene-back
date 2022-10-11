@@ -8,6 +8,8 @@ import { PermissionCodes } from '@/enums/permissionCodes.enum';
 import { IsAuthenticatedGuard } from '@/auth/session.guard';
 import { PermissionsGuard } from '@/guards/permission.guard';
 import { UseGuards } from '@nestjs/common';
+import { ProfessionalFilter } from './dto/professional.filter';
+import { PaginationArgs } from '@/common/pagination.args';
 import { CurrentUser } from '@/decorators/user.decorator';
 import { AuthenticatedUser } from '@/users/entity/authenticated.user.model';
 
@@ -18,8 +20,11 @@ export class ProfessionalResolver {
   @Query(() => [Professional])
   @RequiredPermissions(PermissionCodes.ProfessionalRead)
   @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
-  async getProfessionals() {
-    return this.professionalService.getList();
+  async getProfessionals(
+    @Args() { skip, take }: PaginationArgs,
+    @Args('filter', { nullable: true }) filter?: ProfessionalFilter,
+  ) {
+    return this.professionalService.getList({ filter, skip, take });
   }
 
   @Query(() => Professional, {
@@ -50,6 +55,19 @@ export class ProfessionalResolver {
   }
 
   @Mutation(() => Professional)
+  @RequiredPermissions(PermissionCodes.ProfessionalCreate)
+  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
+  async createPhyisiatrist(
+    @CurrentUser() user: AuthenticatedUser,
+    @Args('input', {
+      type: () => CreateProfessionalInput,
+    })
+    input: CreateProfessionalInput,
+  ) {
+    return this.professionalService.createPhysiatrist(input, user.id);
+  }
+
+  @Mutation(() => Professional)
   @RequiredPermissions(PermissionCodes.ProfessionalUpdate)
   @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
   async updateProfessional(
@@ -61,5 +79,19 @@ export class ProfessionalResolver {
     input: UpdateProfessionalInput,
   ) {
     return this.professionalService.update(id, input, user.id);
+  }
+
+  @Query(() => [Professional])
+  @RequiredPermissions(PermissionCodes.ProfessionalRead)
+  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
+  async getPhysiatrists(
+    @Args() { skip, take }: PaginationArgs,
+    @Args('filter', { nullable: true }) filter?: ProfessionalFilter,
+  ) {
+    return this.professionalService.getListByRole('Fisiatra', {
+      filter,
+      skip,
+      take,
+    });
   }
 }
