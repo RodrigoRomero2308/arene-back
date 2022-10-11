@@ -1,5 +1,5 @@
 import { RoleUser } from '@/prisma-models/role-user/role-user.model';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { RoleUserService } from './role-user.service';
 import { IsAuthenticatedGuard } from '@/auth/session.guard';
 import { UseGuards } from '@nestjs/common';
@@ -13,7 +13,7 @@ import { RoleUserUserIdRoleIdCompoundUniqueInput } from '@/prisma-models/role-us
 
 @Resolver()
 export class RoleUserResolver {
-  constructor(private readonly roleService: RoleUserService) {}
+  constructor(private readonly roleUserService: RoleUserService) {}
   @Mutation(() => RoleUser)
   @RequiredPermissions(PermissionCodes.RoleCreate)
   @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
@@ -24,7 +24,7 @@ export class RoleUserResolver {
     })
     input: CreateRoleUserInput,
   ) {
-    return this.roleService.createRoleUser(input, user.id);
+    return this.roleUserService.createRoleUser(input, user.id);
   }
 
   @Mutation(() => RoleUser)
@@ -35,6 +35,6 @@ export class RoleUserResolver {
     @Args('input', { type: () => RoleUserUserIdRoleIdCompoundUniqueInput })
     input: RoleUserUserIdRoleIdCompoundUniqueInput,
   ) {
-    return this.roleService.deleteRoleUser(input, user.id);
+    return this.roleUserService.deleteRoleUser(input, user.id);
   }
 }
