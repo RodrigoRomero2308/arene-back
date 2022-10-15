@@ -22,4 +22,6 @@ export enum PermissionCodes {
   TreatmentUpdate = 'TREATMENT_U',
   TreatmentDelete = 'TREATMENT_D',
   TreatmentRead = 'TREATMENT_R',
+  DocumentationRead = 'DOCUMENTATION_R',
+  DocumentationCreate = 'DOCUMENTATION_C',
 }

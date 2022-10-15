@@ -30,3 +30,5 @@ lerna-debug.log*
 prisma/dbml**
 
 .env
+
+/exports

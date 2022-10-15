@@ -1,15 +1,24 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { drive_v3, google } from 'googleapis';
 import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariable } from '@/enums/env.enum';
 import { extension } from 'mime-types';
-import { ReadStream } from 'fs';
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  ReadStream,
+  rm,
+  writeFileSync,
+} from 'fs';
+import { join } from 'path';
 
 @Injectable()
 export class FileManagementService {
   private driveService;
   private googleDriveFolderMimeType = 'application/vnd.google-apps.folder';
   private rootFolder = 'arene';
+  private readonly logger = new Logger(FileManagementService.name);
 
   constructor(private readonly configService: ConfigService) {
     const jsonAuth = this.configService.get(
@@ -17,7 +26,9 @@ export class FileManagementService {
     );
 
     if (!jsonAuth) {
-      throw new Error('Not found json to auth on google drive');
+      const errorMessage = 'Not found json to auth on google drive';
+      this.logger.error(errorMessage);
+      throw new Error(errorMessage);
     }
 
     const parsedJsonAuth = JSON.parse(jsonAuth);
@@ -60,8 +71,8 @@ export class FileManagementService {
         q: query,
       });
 
-      console.log('found');
-      console.log(listResult.data.files);
+      this.logger.debug('Files found:');
+      this.logger.debug(listResult.data.files);
 
       const folderId = listResult.data.files?.shift()?.id;
 
@@ -71,12 +82,12 @@ export class FileManagementService {
 
       result = folderId;
     } catch (error) {
-      console.error(error);
+      this.logger.debug(error);
       const folderCreated = await this.createFolder(foldername, parentFolderId);
 
       const folderId = folderCreated.data.id;
 
-      console.log(`new folder ${folderId}`);
+      this.logger.debug(`Created folder ${folderId}`);
 
       if (!folderId) {
         throw new Error(`Could not create folder ${foldername}`);
@@ -142,11 +153,22 @@ export class FileManagementService {
     });
 
     if (response.status !== 200 || !response.data.id) {
-      console.info(response);
+      this.logger.debug(response);
       throw new Error('Error subiendo el archivo');
     }
 
     return response.data.id;
+  }
+
+  private getExportsFolderPath() {
+    const exportsFolderPath = join(process.cwd(), 'exports');
+    if (!existsSync(exportsFolderPath)) {
+      mkdirSync(exportsFolderPath, {
+        recursive: true,
+      });
+    }
+
+    return exportsFolderPath;
   }
 
   async downloadFileFromDriveByFileId(fileId: string) {
@@ -155,8 +177,28 @@ export class FileManagementService {
       alt: 'media',
     });
 
-    console.log(fileResponse);
+    this.logger.debug(`Successfully downloaded file ${fileId}`);
 
-    // TODO: ver que hacer con el archivo que viene en el servicio
+    const fileData = fileResponse.data;
+
+    const exportsFolderPath = this.getExportsFolderPath();
+
+    const newFilePath = join(exportsFolderPath, fileId);
+
+    /* Convertimos a base64 */
+
+    writeFileSync(newFilePath, fileData as string);
+
+    this.logger.debug(`Successfully created file ${newFilePath}`);
+
+    const fileBase64 = readFileSync(newFilePath, {
+      encoding: 'base64',
+    });
+
+    rm(newFilePath, () => {
+      this.logger.debug(`Successfully deleted file ${newFilePath}`);
+    });
+
+    return fileBase64;
   }
 }
