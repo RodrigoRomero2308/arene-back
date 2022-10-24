@@ -19,6 +19,7 @@ import { ProfessionalModule } from './professional/professional.module';
 import { TreatmentModule } from './treatment/treatment.module';
 import { FileManagementModule } from './file-management/file-management.module';
 import { DocumentationModule } from './documentation/documentation.module';
+import { AppointmentModule } from './appointment/appointment.module';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { DocumentationModule } from './documentation/documentation.module';
     TreatmentModule,
     FileManagementModule,
     DocumentationModule,
+    AppointmentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

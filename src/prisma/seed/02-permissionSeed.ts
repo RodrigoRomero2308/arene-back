@@ -129,6 +129,26 @@ const seedPermissions = async (prisma: PrismaClient) => {
       shortname: 'Documentation create',
       description: 'Permission to create documentation',
     },
+    {
+      code: PermissionCodes.AppointmentCreate,
+      shortname: 'Appointment create',
+      description: 'Permission to create appointments',
+    },
+    {
+      code: PermissionCodes.AppointmentDelete,
+      shortname: 'Appointment delete',
+      description: 'Permission to delete appointments',
+    },
+    {
+      code: PermissionCodes.AppointmentUpdate,
+      shortname: 'Appointment update',
+      description: 'Permission to update appointments',
+    },
+    {
+      code: PermissionCodes.AppointmentRead,
+      shortname: 'Appointment read',
+      description: 'Permission to read appointments',
+    },
   ];
 
   const dbPermissions = await prisma.permission.findMany();

@@ -183,6 +183,46 @@ const seedRolePermissions = async (prisma: PrismaClient) => {
       ],
       permissionCode: PermissionCodes.DocumentationCreate,
     },
+    {
+      roleNames: [
+        SystemRoles.Administrador,
+        SystemRoles.Director,
+        SystemRoles.Coordinador,
+        SystemRoles.Fisiatra,
+        SystemRoles.Profesional,
+      ],
+      permissionCode: PermissionCodes.AppointmentCreate,
+    },
+    {
+      roleNames: [
+        SystemRoles.Administrador,
+        SystemRoles.Director,
+        SystemRoles.Coordinador,
+        SystemRoles.Fisiatra,
+        SystemRoles.Profesional,
+      ],
+      permissionCode: PermissionCodes.AppointmentDelete,
+    },
+    {
+      roleNames: [
+        SystemRoles.Administrador,
+        SystemRoles.Director,
+        SystemRoles.Coordinador,
+        SystemRoles.Fisiatra,
+        SystemRoles.Profesional,
+      ],
+      permissionCode: PermissionCodes.AppointmentRead,
+    },
+    {
+      roleNames: [
+        SystemRoles.Administrador,
+        SystemRoles.Director,
+        SystemRoles.Coordinador,
+        SystemRoles.Fisiatra,
+        SystemRoles.Profesional,
+      ],
+      permissionCode: PermissionCodes.AppointmentUpdate,
+    },
   ];
 
   /* Todos los permisos los debe tener admin */
