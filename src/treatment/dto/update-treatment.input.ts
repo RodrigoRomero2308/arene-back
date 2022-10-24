@@ -4,5 +4,5 @@ import { TreatmentUncheckedCreateInput } from '@/prisma-models/treatment/treatme
 @InputType()
 export class UpdateTreatmentInput extends OmitType(
   PartialType(TreatmentUncheckedCreateInput),
-  ['area_id', 'patient_id'],
+  ['area_id', 'patient_id', "Appointment"],
 ) {}
