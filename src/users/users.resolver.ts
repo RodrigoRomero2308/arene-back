@@ -24,7 +24,7 @@ export class UsersResolver {
   }
 
   @Query(() => User)
-  @RequiredPermissions(PermissionCodes.ProfessionalRead)
+  @RequiredPermissions(PermissionCodes.UsersRead)
   @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
   async getUserById(
     @Args('id', {
@@ -49,7 +49,7 @@ export class UsersResolver {
   }
 
   @Mutation(() => User)
-  @RequiredPermissions(PermissionCodes.ProfessionalUpdate)
+  @RequiredPermissions(PermissionCodes.UsersRead)
   @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
   async updateUser(
     @CurrentUser() user: AuthenticatedUser,

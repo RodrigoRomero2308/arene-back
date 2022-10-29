@@ -217,7 +217,7 @@ export class ProfessionalService {
         Professional: {
           create: {
             profession: professional.profession,
-            medical_license_number: professional.medical_licencse_number,
+            medical_license_number: professional.medical_license_number,
             speciality: professional.speciality,
             created_by: userId,
           },
@@ -282,7 +282,7 @@ export class ProfessionalService {
         Professional: {
           create: {
             profession: 'Administrador',
-            medical_license_number: professional.medical_licencse_number,
+            medical_license_number: professional.medical_license_number,
             speciality: professional.speciality,
             created_by: userId,
           },
@@ -347,7 +347,7 @@ export class ProfessionalService {
         Professional: {
           create: {
             profession: 'Coordinador',
-            medical_license_number: professional.medical_licencse_number,
+            medical_license_number: professional.medical_license_number,
             speciality: professional.speciality,
             created_by: userId,
           },
@@ -412,7 +412,7 @@ export class ProfessionalService {
         Professional: {
           create: {
             profession: 'Director',
-            medical_license_number: professional.medical_licencse_number,
+            medical_license_number: professional.medical_license_number,
             speciality: professional.speciality,
             created_by: userId,
           },
@@ -477,7 +477,7 @@ export class ProfessionalService {
         Professional: {
           create: {
             profession: 'Fisiatra',
-            medical_license_number: professional.medical_licencse_number,
+            medical_license_number: professional.medical_license_number,
             speciality: professional.speciality,
             created_by: userId,
           },
