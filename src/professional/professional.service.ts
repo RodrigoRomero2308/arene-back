@@ -17,7 +17,11 @@ export class ProfessionalService {
   ) {}
 
   private include: Prisma.ProfessionalInclude = {
-    user: true,
+    user: {
+      include: {
+        address: true,
+      },
+    },
   };
 
   findById(id: number) {
@@ -221,6 +225,201 @@ export class ProfessionalService {
         RoleUser: {
           create: {
             roleId: professionalRole.id,
+          },
+        },
+        address: address
+          ? {
+              create: {
+                ...address,
+                created_by: userId,
+              },
+            }
+          : undefined,
+        phoneType: phone_type_id
+          ? {
+              connect: {
+                id: phone_type_id,
+              },
+            }
+          : undefined,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    return this.findById(result.id);
+  }
+
+  async createAdministrator(input: CreateProfessionalInput, userId: number) {
+    await this.usersService.validateRegister(input);
+    input.password = await this.hashService.hash(input.password);
+    const { professional, address, phone_type_id, ...createUserInput } = input;
+
+    const administratorRole = await this.prismaService.role.findFirst({
+      where: {
+        dts: null,
+        name: SystemRoles.Administrador,
+      },
+    });
+
+    if (!administratorRole) {
+      throw new InternalServerErrorException(
+        undefined,
+        'Administrator role is not found',
+      );
+    }
+
+    const result = await this.prismaService.user.create({
+      data: {
+        ...createUserInput,
+        active: true,
+        createdBy: {
+          connect: {
+            id: userId,
+          },
+        },
+        Professional: {
+          create: {
+            profession: 'Administrador',
+            medical_license_number: professional.medical_licencse_number,
+            speciality: professional.speciality,
+            created_by: userId,
+          },
+        },
+        RoleUser: {
+          create: {
+            roleId: administratorRole.id,
+          },
+        },
+        address: address
+          ? {
+              create: {
+                ...address,
+                created_by: userId,
+              },
+            }
+          : undefined,
+        phoneType: phone_type_id
+          ? {
+              connect: {
+                id: phone_type_id,
+              },
+            }
+          : undefined,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    return this.findById(result.id);
+  }
+
+  async createCoordinator(input: CreateProfessionalInput, userId: number) {
+    await this.usersService.validateRegister(input);
+    input.password = await this.hashService.hash(input.password);
+    const { professional, address, phone_type_id, ...createUserInput } = input;
+
+    const coordinatorRole = await this.prismaService.role.findFirst({
+      where: {
+        dts: null,
+        name: SystemRoles.Coordinador,
+      },
+    });
+
+    if (!coordinatorRole) {
+      throw new InternalServerErrorException(
+        undefined,
+        'Coordinator role is not found',
+      );
+    }
+
+    const result = await this.prismaService.user.create({
+      data: {
+        ...createUserInput,
+        active: true,
+        createdBy: {
+          connect: {
+            id: userId,
+          },
+        },
+        Professional: {
+          create: {
+            profession: 'Coordinador',
+            medical_license_number: professional.medical_licencse_number,
+            speciality: professional.speciality,
+            created_by: userId,
+          },
+        },
+        RoleUser: {
+          create: {
+            roleId: coordinatorRole.id,
+          },
+        },
+        address: address
+          ? {
+              create: {
+                ...address,
+                created_by: userId,
+              },
+            }
+          : undefined,
+        phoneType: phone_type_id
+          ? {
+              connect: {
+                id: phone_type_id,
+              },
+            }
+          : undefined,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    return this.findById(result.id);
+  }
+
+  async createDirector(input: CreateProfessionalInput, userId: number) {
+    await this.usersService.validateRegister(input);
+    input.password = await this.hashService.hash(input.password);
+    const { professional, address, phone_type_id, ...createUserInput } = input;
+
+    const directorRole = await this.prismaService.role.findFirst({
+      where: {
+        dts: null,
+        name: SystemRoles.Director,
+      },
+    });
+
+    if (!directorRole) {
+      throw new InternalServerErrorException(
+        undefined,
+        'Director role is not found',
+      );
+    }
+
+    const result = await this.prismaService.user.create({
+      data: {
+        ...createUserInput,
+        active: true,
+        createdBy: {
+          connect: {
+            id: userId,
+          },
+        },
+        Professional: {
+          create: {
+            profession: 'Director',
+            medical_license_number: professional.medical_licencse_number,
+            speciality: professional.speciality,
+            created_by: userId,
+          },
+        },
+        RoleUser: {
+          create: {
+            roleId: directorRole.id,
           },
         },
         address: address

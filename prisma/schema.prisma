@@ -31,7 +31,7 @@ model User {
   /// @HideField()
   password                  String
   active                    Boolean
-  birth_date                DateTime             @db.Date
+  birth_date                String
   its                       DateTime             @default(now())
   uts                       DateTime?
   dts                       DateTime?

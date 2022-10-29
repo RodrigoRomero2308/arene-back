@@ -9,9 +9,6 @@ import { RequiredPermissions } from '@/decorators/permission.decorator';
 import { PermissionCodes } from '@/enums/permissionCodes.enum';
 import { User } from '@/prisma-models/user/user.model';
 import { CreateUserInput } from './DTO/createUserInput';
-import { PaginationArgs } from '@/common/pagination.args';
-import { UserFilter } from './DTO/user.filter';
-import { ProfessionalFilter } from '@/professional/dto/professional.filter';
 import { UpdateUserInput } from './DTO/updateUserInput';
 
 @Resolver()
@@ -26,48 +23,7 @@ export class UsersResolver {
     return true;
   }
 
-  @Query(() => User, {
-    nullable: true,
-  })
-  @Mutation(() => User)
-  @RequiredPermissions(PermissionCodes.ProfessionalCreate)
-  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
-  async createAdministrator(
-    @CurrentUser() user: AuthenticatedUser,
-    @Args('input', {
-      type: () => CreateUserInput,
-    })
-    input: CreateUserInput,
-  ) {
-    return this.usersService.registerAdministrator(input, user.id);
-  }
-
-  @Mutation(() => User)
-  @RequiredPermissions(PermissionCodes.ProfessionalCreate)
-  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
-  async createDirector(
-    @CurrentUser() user: AuthenticatedUser,
-    @Args('input', {
-      type: () => CreateUserInput,
-    })
-    input: CreateUserInput,
-  ) {
-    return this.usersService.registerDirector(input, user.id);
-  }
-
-  @Mutation(() => User)
-  @RequiredPermissions(PermissionCodes.ProfessionalCreate)
-  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
-  async createCoordinator(
-    @CurrentUser() user: AuthenticatedUser,
-    @Args('input', {
-      type: () => CreateUserInput,
-    })
-    input: CreateUserInput,
-  ) {
-    return this.usersService.registerCoordinator(input, user.id);
-  }
-
+  @Query(() => User)
   @RequiredPermissions(PermissionCodes.ProfessionalRead)
   @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
   async getUserById(
@@ -105,60 +61,4 @@ export class UsersResolver {
   ) {
     return this.usersService.update(id, input, user.id);
   }
-
-  @Query(() => [User])
-  @RequiredPermissions(PermissionCodes.ProfessionalRead)
-  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
-  async getAdministrators(
-    @Args() { skip, take }: PaginationArgs,
-    @Args('filter', { nullable: true }) filter?: UserFilter,
-  ) {
-    return this.usersService.getListByRole('Administrador', {
-      filter,
-      skip,
-      take,
-    });
-  }
-
-  @Query(() => [User])
-  @RequiredPermissions(PermissionCodes.ProfessionalRead)
-  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
-  async getCoordinators(
-    @Args() { skip, take }: PaginationArgs,
-    @Args('filter', { nullable: true }) filter?: UserFilter,
-  ) {
-    return this.usersService.getListByRole('Coordinador', {
-      filter,
-      skip,
-      take,
-    });
-  }
-
-  @Query(() => [User])
-  @RequiredPermissions(PermissionCodes.ProfessionalRead)
-  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
-  async getDirectors(
-    @Args() { skip, take }: PaginationArgs,
-    @Args('filter', { nullable: true }) filter?: UserFilter,
-  ) {
-    return this.usersService.getListByRole('Director', {
-      filter,
-      skip,
-      take,
-    });
-  }
-
-  // @Query(() => [User])
-  // @RequiredPermissions(PermissionCodes.ProfessionalRead)
-  // @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
-  // async getPhysiatrists(
-  //   @Args() { skip, take }: PaginationArgs,
-  //   @Args('filter', { nullable: true }) filter?: ProfessionalFilter,
-  // ) {
-  //   return this.usersService.getListByRole('Fisiatra', {
-  //     filter,
-  //     skip,
-  //     take,
-  //   });
-  // }
 }

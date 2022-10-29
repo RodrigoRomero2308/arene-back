@@ -16,4 +16,7 @@ export class ProfessionalFilter {
 
   @Field({ nullable: true })
   medical_license_number?: string;
+
+  @Field({ nullable: true })
+  email?: string;
 }
