@@ -250,12 +250,21 @@ model Patient {
   primary_doctor_phone_type_id Int?
   primary_doctor_phone_number  String?
   diagnose                     String
-  diagnose_date                DateTime
+  diagnose_date                String
   needs_transfer               Boolean              @default(false)
   transfer                     String?
   transfer_responsible         String?
   transfer_phone_type_id       Int?
   transfer_phone_number        String?
+  cud_number                   String?
+  cud_companion                Boolean?
+  cud_valid_from               String?
+  cud_valid_to                 String?
+  social_work                  String?
+  social_work_plan             String?
+  social_work_number           String?
+  social_work_valid_from       String?
+  social_work_valid_to         String?
   created_by                   Int
   updated_by                   Int?
   deleted_by                   Int?
@@ -311,24 +320,25 @@ model DocumentationType {
 }
 
 model Documentation {
-  id                     Int                  @id @default(autoincrement())
-  patientUser_id         Int
-  documentationTypeId    Int?
-  otherDocumentationType String?
-  filename               String
-  mimetype               String
-  created_by             Int
-  updated_by             Int?
-  deleted_by             Int?
-  its                    DateTime             @default(now())
-  uts                    DateTime?
-  dts                    DateTime?
-  createdBy              User                 @relation("documentation_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  updatedBy              User?                @relation("documentation_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  deletedBy              User?                @relation("documentation_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  patient                Patient              @relation(fields: [patientUser_id], references: [user_id])
-  documentationType      DocumentationType?   @relation(fields: [documentationTypeId], references: [id])
-  PatientInformation     PatientInformation[]
+  id                       Int                  @id @default(autoincrement())
+  patient_id               Int
+  documentation_type_id    Int?
+  other_documentation_type String?
+  external_id              String
+  filename                 String
+  mimetype                 String
+  created_by               Int
+  updated_by               Int?
+  deleted_by               Int?
+  its                      DateTime             @default(now())
+  uts                      DateTime?
+  dts                      DateTime?
+  createdBy                User                 @relation("documentation_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  updatedBy                User?                @relation("documentation_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  deletedBy                User?                @relation("documentation_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  patient                  Patient              @relation(fields: [patient_id], references: [user_id])
+  documentationType        DocumentationType?   @relation(fields: [documentation_type_id], references: [id])
+  PatientInformation       PatientInformation[]
 }
 
 model Professional {

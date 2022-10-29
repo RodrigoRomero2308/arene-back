@@ -14,12 +14,12 @@ import { UpdatePatientInput } from './DTO/updatePatientInput';
 import { PatientService } from './patient.service';
 
 @Resolver()
+@UseGuards(IsAuthenticatedGuard, PermissionsGuard)
 export class PatientResolver {
   constructor(private readonly patientService: PatientService) {}
 
   @Query(() => [Patient])
   @RequiredPermissions(PermissionCodes.PatientRead)
-  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
   async getPatients(
     @Args() { skip, take }: PaginationArgs,
     @Args('filter', { nullable: true }) filter?: PatientFilter,
@@ -31,7 +31,6 @@ export class PatientResolver {
     nullable: true,
   })
   @RequiredPermissions(PermissionCodes.PatientRead)
-  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
   async getPatientById(
     @Args('id', {
       type: () => Int,
@@ -43,7 +42,6 @@ export class PatientResolver {
 
   @Mutation(() => Patient)
   @RequiredPermissions(PermissionCodes.PatientCreate)
-  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
   async createPatient(
     @CurrentUser() user: AuthenticatedUser,
     @Args('input', {
@@ -56,7 +54,6 @@ export class PatientResolver {
 
   @Mutation(() => Patient)
   @RequiredPermissions(PermissionCodes.PatientUpdate)
-  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
   async updatePatient(
     @CurrentUser() user: AuthenticatedUser,
     @Args('id', { type: () => Int }) id: number,
