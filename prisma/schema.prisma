@@ -324,6 +324,7 @@ model Documentation {
   patient_id               Int
   documentation_type_id    Int?
   other_documentation_type String?
+  /// @HideField()
   external_id              String
   filename                 String
   mimetype                 String

@@ -4,12 +4,12 @@ import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariable } from '@/enums/env.enum';
 import { extension } from 'mime-types';
 import {
+  createWriteStream,
   existsSync,
   mkdirSync,
   readFileSync,
   ReadStream,
   rm,
-  writeFileSync,
 } from 'fs';
 import { join } from 'path';
 
@@ -71,8 +71,11 @@ export class FileManagementService {
         q: query,
       });
 
-      this.logger.debug('Files found:');
-      this.logger.debug(listResult.data.files);
+      this.logger.debug(
+        `Files found for folder ${foldername}: ${
+          listResult.data.files?.length || 0
+        }`,
+      );
 
       const folderId = listResult.data.files?.shift()?.id;
 
@@ -172,10 +175,15 @@ export class FileManagementService {
   }
 
   async downloadFileFromDriveByFileId(fileId: string) {
-    const fileResponse = await this.driveService.files.get({
-      fileId,
-      alt: 'media',
-    });
+    const fileResponse = await this.driveService.files.get(
+      {
+        fileId,
+        alt: 'media',
+      },
+      {
+        responseType: 'stream',
+      },
+    );
 
     this.logger.debug(`Successfully downloaded file ${fileId}`);
 
@@ -185,9 +193,11 @@ export class FileManagementService {
 
     const newFilePath = join(exportsFolderPath, fileId);
 
-    /* Convertimos a base64 */
+    const writeStream = createWriteStream(newFilePath);
 
-    writeFileSync(newFilePath, fileData as string);
+    await new Promise((resolve, reject) => {
+      fileData.pipe(writeStream).on('finish', resolve).on('error', reject);
+    });
 
     this.logger.debug(`Successfully created file ${newFilePath}`);
 

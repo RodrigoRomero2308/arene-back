@@ -18,6 +18,7 @@ import { RoleUserModule } from './role-user/role-user.module';
 import { ProfessionalModule } from './professional/professional.module';
 import { FileManagementModule } from './file-management/file-management.module';
 import { DocumentationModule } from './documentation/documentation.module';
+import { DocumentationTypeModule } from './documentation_type/documentation_type.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { DocumentationModule } from './documentation/documentation.module';
           buildSchemaOptions: {
             numberScalarMode: 'integer',
           },
+          uploads: false,
         };
       },
     }),
@@ -58,6 +60,7 @@ import { DocumentationModule } from './documentation/documentation.module';
     ProfessionalModule,
     FileManagementModule,
     DocumentationModule,
+    DocumentationTypeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
