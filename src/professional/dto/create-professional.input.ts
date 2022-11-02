@@ -12,7 +12,7 @@ export class CreateProfessionalWithoutUserInput {
   speciality: string;
   @Field()
   @IsNotEmpty()
-  medical_licencse_number: string;
+  medical_license_number: string;
 }
 
 @InputType()
