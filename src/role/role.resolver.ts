@@ -70,4 +70,14 @@ export class RoleResolver {
   ) {
     return this.roleService.deleteRole(id, user.id);
   }
+
+  @Query(() => Role)
+  @RequiredPermissions(PermissionCodes.RoleCreate)
+  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
+  async getRoleByName(
+    @CurrentUser() user: AuthenticatedUser,
+    @Args('name', { type: () => String }) name: string,
+  ) {
+    return this.roleService.getRoleByName(name);
+  }
 }

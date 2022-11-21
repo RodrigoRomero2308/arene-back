@@ -37,4 +37,14 @@ export class RoleUserResolver {
   ) {
     return this.roleUserService.deleteRoleUser(input, user.id);
   }
+
+  @Query(() => [RoleUser])
+  @RequiredPermissions(PermissionCodes.RoleCreate)
+  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
+  async getRoleUsersByUserId(
+    @CurrentUser() user: AuthenticatedUser,
+    @Args('userId') userId: number,
+  ) {
+    return this.roleUserService.getRoleUsersByUserId(userId);
+  }
 }
