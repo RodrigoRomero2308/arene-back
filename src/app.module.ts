@@ -20,6 +20,7 @@ import { TreatmentModule } from './treatment/treatment.module';
 import { FileManagementModule } from './file-management/file-management.module';
 import { DocumentationModule } from './documentation/documentation.module';
 import { AppointmentModule } from './appointment/appointment.module';
+import { DocumentationTypeModule } from './documentation_type/documentation_type.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { AppointmentModule } from './appointment/appointment.module';
           buildSchemaOptions: {
             numberScalarMode: 'integer',
           },
+          uploads: false,
         };
       },
     }),
@@ -62,6 +64,7 @@ import { AppointmentModule } from './appointment/appointment.module';
     FileManagementModule,
     DocumentationModule,
     AppointmentModule,
+    DocumentationTypeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

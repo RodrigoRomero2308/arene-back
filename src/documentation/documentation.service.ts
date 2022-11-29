@@ -15,6 +15,10 @@ export class DocumentationService {
     private readonly fileManagementService: FileManagementService,
   ) {}
 
+  private include: Prisma.DocumentationInclude = {
+    documentationType: true,
+  };
+
   async save(input: CreateDocumentationInput, user: AuthenticatedUser) {
     const {
       file,
@@ -30,7 +34,7 @@ export class DocumentationService {
       throw new Error('Invalid parameters for documentation type');
     }
 
-    const { createReadStream, filename, mimetype } = await file.promise;
+    const { createReadStream, filename, mimetype } = await file;
 
     const fileId = await this.fileManagementService.uploadToDrive({
       fileInput: createReadStream(),
@@ -45,6 +49,8 @@ export class DocumentationService {
         created_by: user.id,
         patient_id,
         external_id: fileId,
+        documentation_type_id,
+        other_documentation_type,
       },
     });
   }
@@ -55,6 +61,7 @@ export class DocumentationService {
         id,
         dts: null,
       },
+      include: this.include,
     });
 
     if (!documentation) {
@@ -165,6 +172,7 @@ export class DocumentationService {
     });
     return this.prismaService.documentation.findMany({
       ...prismaParams,
+      include: this.include,
     });
   }
 

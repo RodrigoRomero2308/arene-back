@@ -23,8 +23,8 @@ export class DocumentationResolver {
   @RequiredPermissions(PermissionCodes.DocumentationRead)
   async getDocumentationList(
     @Args() { skip, take }: PaginationArgs,
-    @Args('filter') filter?: DocumentationFilterInput,
-    @Args('orderBy') orderBy?: DocumentationOrderByInput,
+    @Args('filter', { nullable: true }) filter?: DocumentationFilterInput,
+    @Args('orderBy', { nullable: true }) orderBy?: DocumentationOrderByInput,
   ) {
     return this.documentationService.getList({
       filter,
@@ -59,6 +59,6 @@ export class DocumentationResolver {
     @Args('input', { type: () => CreateDocumentationInput })
     input: CreateDocumentationInput,
   ) {
-    return this.documentationService.save(input, user);
+    return await this.documentationService.save(input, user);
   }
 }
