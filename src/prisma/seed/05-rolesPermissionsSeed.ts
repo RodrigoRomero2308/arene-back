@@ -167,6 +167,14 @@ const seedRolePermissions = async (prisma: PrismaClient) => {
       ],
       permissionCode: PermissionCodes.DocumentationCreate,
     },
+    {
+      roleNames: [SystemRoles.Coordinador, SystemRoles.Director],
+      permissionCode: PermissionCodes.AreaProfessionalCreate,
+    },
+    {
+      roleNames: [SystemRoles.Coordinador, SystemRoles.Director],
+      permissionCode: PermissionCodes.AreaProfessionalDelete,
+    },
   ];
 
   /* Todos los permisos los debe tener admin */

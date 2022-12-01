@@ -18,6 +18,7 @@ import { RoleUserModule } from './role-user/role-user.module';
 import { ProfessionalModule } from './professional/professional.module';
 import { FileManagementModule } from './file-management/file-management.module';
 import { DocumentationModule } from './documentation/documentation.module';
+import { AreaProfessionalModule } from './area-professional/area-professional.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { DocumentationModule } from './documentation/documentation.module';
     ProfessionalModule,
     FileManagementModule,
     DocumentationModule,
+    AreaProfessionalModule,
   ],
   controllers: [AppController],
   providers: [AppService],

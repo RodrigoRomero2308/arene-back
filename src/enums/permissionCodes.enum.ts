@@ -20,4 +20,6 @@ export enum PermissionCodes {
   ProfessionalRead = 'PROFESSIONAL_R',
   DocumentationRead = 'DOCUMENTATION_R',
   DocumentationCreate = 'DOCUMENTATION_C',
+  AreaProfessionalCreate = 'AREAPROFESSIONAL_C',
+  AreaProfessionalDelete = 'AREAPROFESSIONAL_D',
 }
