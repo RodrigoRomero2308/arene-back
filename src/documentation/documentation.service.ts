@@ -34,6 +34,21 @@ export class DocumentationService {
       throw new Error('Invalid parameters for documentation type');
     }
 
+    let documentationTypeName = other_documentation_type;
+
+    if (documentation_type_id) {
+      const documentationType =
+        await this.prismaService.documentationType.findFirst({
+          where: {
+            id: documentation_type_id,
+          },
+        });
+
+      if (documentationType) {
+        documentationTypeName = documentationType.name;
+      }
+    }
+
     const { createReadStream, filename, mimetype } = await file;
 
     const fileId = await this.fileManagementService.uploadToDrive({
@@ -51,6 +66,13 @@ export class DocumentationService {
         external_id: fileId,
         documentation_type_id,
         other_documentation_type,
+        PatientInformation: {
+          create: {
+            information: `Documentacion agregada: ${filename}. Tipo: ${documentationTypeName}`,
+            patient_id,
+            created_by: user.id,
+          },
+        },
       },
     });
   }

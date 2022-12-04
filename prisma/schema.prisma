@@ -290,13 +290,13 @@ model PatientInformation {
   patient_id       Int
   information      String
   documentation_id Int?
-  created_by       Int
+  created_by       Int?
   updated_by       Int?
   deleted_by       Int?
   its              DateTime       @default(now())
   uts              DateTime?
   dts              DateTime?
-  createdBy        User           @relation("patient_information_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  createdBy        User?          @relation("patient_information_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   updatedBy        User?          @relation("patient_information_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   deletedBy        User?          @relation("patient_information_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   patient          Patient        @relation(fields: [patient_id], references: [user_id])

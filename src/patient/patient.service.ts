@@ -154,6 +154,12 @@ export class PatientService {
             ...patient,
             created_by: userId,
             patient_status_id: PatientStatus.Nuevo,
+            PatientInformation: {
+              create: {
+                information: 'Paciente creado',
+                created_by: userId,
+              },
+            },
           },
         },
         RoleUser: {
@@ -224,6 +230,12 @@ export class PatientService {
               ...patient,
               updated_by: userId,
               uts: new Date(),
+              PatientInformation: {
+                create: {
+                  information: 'Datos del paciente actualizados',
+                  created_by: userId,
+                },
+              },
             },
           },
         },
