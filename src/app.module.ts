@@ -61,7 +61,7 @@ import { DocumentationTypeModule } from './documentation_type/documentation_type
     FileManagementModule,
     DocumentationModule,
     DocumentationTypeModule,
-  ],
+    ],
   controllers: [AppController],
   providers: [AppService],
 })

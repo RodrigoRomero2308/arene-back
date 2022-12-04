@@ -20,4 +20,5 @@ export enum PermissionCodes {
   ProfessionalRead = 'PROFESSIONAL_R',
   DocumentationRead = 'DOCUMENTATION_R',
   DocumentationCreate = 'DOCUMENTATION_C',
+  ChangePatientStatus = 'CHANGE_PATIENT_STATUS',
 }
