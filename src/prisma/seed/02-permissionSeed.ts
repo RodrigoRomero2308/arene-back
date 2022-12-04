@@ -149,6 +149,11 @@ const seedPermissions = async (prisma: PrismaClient) => {
       shortname: 'Appointment read',
       description: 'Permission to read appointments',
     },
+    {
+      code: PermissionCodes.ChangePatientStatus,
+      shortname: 'Change patient status',
+      description: 'Permission to change patient status',
+    },
   ];
 
   const dbPermissions = await prisma.permission.findMany();

@@ -223,6 +223,16 @@ const seedRolePermissions = async (prisma: PrismaClient) => {
       ],
       permissionCode: PermissionCodes.AppointmentUpdate,
     },
+    {
+      roleNames: [
+        SystemRoles.Administrador,
+        SystemRoles.Director,
+        SystemRoles.Coordinador,
+        SystemRoles.Fisiatra,
+        SystemRoles.Profesional,
+      ],
+      permissionCode: PermissionCodes.ChangePatientStatus,
+    },
   ];
 
   /* Todos los permisos los debe tener admin */
