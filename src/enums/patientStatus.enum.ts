@@ -1,9 +1,6 @@
 export enum PatientStatus {
-  Nuevo = 1,
-  Pendiente,
-  Rechazado,
+  NoAceptado = 1,
   Aceptado,
-  EnTratamiento,
-  PendienteAutorizacionAlta,
+  EnEvaluacionOS,
   AltaMedica,
 }
