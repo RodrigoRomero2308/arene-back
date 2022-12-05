@@ -70,4 +70,15 @@ export class RoleUserService {
       },
     });
   }
+
+  async getRoleUsersByUserId(userId: number) {
+    return this.prismaService.roleUser.findMany({
+      where: {
+        userId: userId,
+      },
+      include: {
+        role: true,
+      },
+    });
+  }
 }

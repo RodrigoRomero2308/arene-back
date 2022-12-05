@@ -580,4 +580,8 @@ export class ProfessionalService {
 
     return this.findById(id);
   }
+
+  async getRolesThatProfessionalDontHave(id: number) {
+    await this.prismaService.role.findMany({});
+  }
 }

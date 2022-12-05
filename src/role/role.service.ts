@@ -17,7 +17,14 @@ export class RoleService {
   getRoles() {
     return this.prismaService.role.findMany({
       where: {
-        dts: null,
+        AND: [
+          {
+            dts: null,
+          },
+          {
+            name: { not: 'Admin' },
+          },
+        ],
       },
     });
   }
@@ -89,6 +96,14 @@ export class RoleService {
       data: {
         deleted_by: userId,
         dts: new Date(),
+      },
+    });
+  }
+
+  async getRoleByName(name: string) {
+    return this.prismaService.role.findFirst({
+      where: {
+        name: name,
       },
     });
   }
