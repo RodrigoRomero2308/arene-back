@@ -19,6 +19,7 @@ import { ProfessionalModule } from './professional/professional.module';
 import { TreatmentModule } from './treatment/treatment.module';
 import { FileManagementModule } from './file-management/file-management.module';
 import { DocumentationModule } from './documentation/documentation.module';
+import { AreaProfessionalModule } from './area-professional/area-professional.module';
 import { AppointmentModule } from './appointment/appointment.module';
 import { DocumentationTypeModule } from './documentation_type/documentation_type.module';
 import { PatientInformationModule } from './patient-information/patient-information.module';
@@ -64,6 +65,7 @@ import { PatientInformationModule } from './patient-information/patient-informat
     TreatmentModule,
     FileManagementModule,
     DocumentationModule,
+    AreaProfessionalModule,
     AppointmentModule,
     DocumentationTypeModule,
     PatientInformationModule,

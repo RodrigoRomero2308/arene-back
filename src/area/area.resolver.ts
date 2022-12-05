@@ -70,4 +70,14 @@ export class AreaResolver {
   ) {
     return this.areaService.delete(id, user.id);
   }
+
+  @Query(() => Area)
+  @RequiredPermissions(PermissionCodes.AdminArea)
+  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
+  async getAreaByAreaName(
+    @CurrentUser() user: AuthenticatedUser,
+    @Args('areaName', { type: () => String }) areaName: string,
+  ) {
+    return this.areaService.getAreaByAreaName(areaName);
+  }
 }

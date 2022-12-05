@@ -130,6 +130,16 @@ const seedPermissions = async (prisma: PrismaClient) => {
       description: 'Permission to create documentation',
     },
     {
+      code: PermissionCodes.AreaProfessionalCreate,
+      shortname: 'AreaProfessional Create',
+      description: 'Create a relation between an Area and a Professional',
+    },
+    {
+      code: PermissionCodes.AreaProfessionalDelete,
+      shortname: 'AreaProfessional Delete',
+      description: 'Delete a relation between an Area and a Professional',
+    },
+    {
       code: PermissionCodes.AppointmentCreate,
       shortname: 'Appointment create',
       description: 'Permission to create appointments',

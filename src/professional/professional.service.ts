@@ -173,6 +173,7 @@ export class ProfessionalService {
                       contains: role,
                     },
                   },
+                  deleted_by: null,
                 },
               },
             },

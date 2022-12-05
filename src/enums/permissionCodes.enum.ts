@@ -24,6 +24,8 @@ export enum PermissionCodes {
   TreatmentRead = 'TREATMENT_R',
   DocumentationRead = 'DOCUMENTATION_R',
   DocumentationCreate = 'DOCUMENTATION_C',
+  AreaProfessionalCreate = 'AREAPROFESSIONAL_C',
+  AreaProfessionalDelete = 'AREAPROFESSIONAL_D',
   AppointmentCreate = 'APPOINTMENT_C',
   AppointmentUpdate = 'APPOINTMENT_U',
   AppointmentDelete = 'APPOINTMENT_D',
