@@ -324,6 +324,7 @@ model Documentation {
   patient_id               Int
   documentation_type_id    Int?
   other_documentation_type String?
+  /// @HideField()
   external_id              String
   filename                 String
   mimetype                 String
@@ -386,8 +387,9 @@ model Appointment {
   id              Int          @id @default(autoincrement())
   treatment_id    Int
   professional_id Int
-  start_date      DateTime
-  end_date        DateTime
+  day_of_the_week    String
+  start_hour      String
+  end_hour        String
   treatment       Treatment    @relation(fields: [treatment_id], references: [id])
   professional    Professional @relation(fields: [professional_id], references: [user_id])
 }

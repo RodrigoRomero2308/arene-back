@@ -15,7 +15,7 @@ export class PatientService {
     private readonly prismaService: PrismaService,
     private readonly usersService: UsersService,
     private readonly hashService: HashService,
-  ) {}
+  ) { }
 
   private include: Prisma.PatientInclude = {
     user: {
@@ -153,7 +153,7 @@ export class PatientService {
           create: {
             ...patient,
             created_by: userId,
-            patient_status_id: PatientStatus.Nuevo,
+            patient_status_id: PatientStatus.EnEvaluacionOS,
           },
         },
         RoleUser: {
@@ -163,20 +163,20 @@ export class PatientService {
         },
         ...(address
           ? {
-              address: {
-                create: {
-                  ...address,
-                  created_by: userId,
-                },
+            address: {
+              create: {
+                ...address,
+                created_by: userId,
               },
-            }
+            },
+          }
           : {}),
         phoneType: phone_type_id
           ? {
-              connect: {
-                id: phone_type_id,
-              },
-            }
+            connect: {
+              id: phone_type_id,
+            },
+          }
           : undefined,
       },
       select: {
@@ -229,21 +229,21 @@ export class PatientService {
         },
         ...(address
           ? {
-              address: {
-                update: {
-                  ...address,
-                  updated_by: userId,
-                  uts: new Date(),
-                },
+            address: {
+              update: {
+                ...address,
+                updated_by: userId,
+                uts: new Date(),
               },
-            }
+            },
+          }
           : {}),
         phoneType: phone_type_id
           ? {
-              connect: {
-                id: phone_type_id,
-              },
-            }
+            connect: {
+              id: phone_type_id,
+            },
+          }
           : undefined,
       },
       where: {
@@ -251,6 +251,21 @@ export class PatientService {
       },
       select: {
         id: true,
+      },
+    });
+
+    return this.findById(id);
+  }
+
+  async changeStatus(id: number, statusId: number, userId: number) {
+    await this.prismaService.patient.update({
+      data: {
+        patient_status_id: statusId,
+        updated_by: userId,
+        uts: new Date(),
+      },
+      where: {
+        user_id: id,
       },
     });
 
