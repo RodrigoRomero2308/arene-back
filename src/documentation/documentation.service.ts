@@ -1,3 +1,4 @@
+import { PatientInformationTypes } from '@/enums/patientInformationType.enum';
 import { FileManagementService } from '@/file-management/file-management.service';
 import { PrismaService } from '@/prisma/prisma.service';
 import { AuthenticatedUser } from '@/users/entity/authenticated.user.model';
@@ -68,6 +69,8 @@ export class DocumentationService {
         other_documentation_type,
         PatientInformation: {
           create: {
+            patient_information_type_id:
+              PatientInformationTypes.DocumentacionAgregada,
             information: `Documentacion agregada: ${filename}. Tipo: ${documentationTypeName}`,
             patient_id,
             created_by: user.id,

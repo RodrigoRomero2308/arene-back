@@ -1,3 +1,4 @@
+import { PatientInformationTypes } from '@/enums/patientInformationType.enum';
 import { PatientStatus } from '@/enums/patientStatus.enum';
 import { SystemRoles } from '@/enums/systemRoles.enum';
 import { HashService } from '@/hash/hash.service';
@@ -156,6 +157,8 @@ export class PatientService {
             patient_status_id: PatientStatus.EnEvaluacionOS,
             PatientInformation: {
               create: {
+                patient_information_type_id:
+                  PatientInformationTypes.PacienteCreado,
                 information: 'Paciente creado',
                 created_by: userId,
               },
@@ -232,6 +235,8 @@ export class PatientService {
               uts: new Date(),
               PatientInformation: {
                 create: {
+                  patient_information_type_id:
+                    PatientInformationTypes.PacienteActualizado,
                   information: 'Datos del paciente actualizados',
                   created_by: userId,
                 },
