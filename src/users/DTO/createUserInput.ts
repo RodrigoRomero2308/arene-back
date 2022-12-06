@@ -5,34 +5,34 @@ import { IsEmail, IsNotEmpty, IsNumberString } from 'class-validator';
 @InputType()
 export class CreateOnlyUserInput {
   @Field()
-  @IsNotEmpty()
-  @IsNumberString()
+  @IsNotEmpty({ message: 'El DNI no puede estar vacío' })
+  @IsNumberString(undefined, { message: 'El DNI debe contener solo números' })
   dni: string;
   @Field()
-  @IsNotEmpty()
-  @IsEmail()
+  @IsNotEmpty({ message: 'El email no puede estar vacío' })
+  @IsEmail({ message: 'El email ingresado no es válido' })
   email: string;
   @Field()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'El nombre no puede estar vacío' })
   firstname: string;
   @Field({ nullable: true })
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'El género no puede estar vacío' })
   gender?: string;
   @Field({ nullable: true })
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'El estado civil no puede estar vacío' })
   marital_status?: string;
   @Field()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'El apellido no puede estar vacío' })
   lastname: string;
   @Field()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'La contraseña no puede estar vacía' })
   password: string;
   @Field()
   birth_date: string;
   @Field({ nullable: true })
   phone_type_id?: number;
   @Field({ nullable: true })
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'El numero de teléfono no puede estar vacío' })
   phone_number?: string;
 }
 
