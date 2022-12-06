@@ -93,4 +93,12 @@ export class AreaService {
       },
     });
   }
+
+  async getAreaByAreaName(areaName: string) {
+    await this.prismaService.area.findFirst({
+      where: {
+        name: areaName,
+      },
+    });
+  }
 }

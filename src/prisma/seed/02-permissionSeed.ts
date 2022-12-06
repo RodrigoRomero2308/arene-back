@@ -100,6 +100,26 @@ const seedPermissions = async (prisma: PrismaClient) => {
       description: 'Permission to read profesionals',
     },
     {
+      code: PermissionCodes.TreatmentCreate,
+      shortname: 'Treatment Create',
+      description: 'Permission to create treatments',
+    },
+    {
+      code: PermissionCodes.TreatmentDelete,
+      shortname: 'Treatment Delete',
+      description: 'Permission to delete treatments',
+    },
+    {
+      code: PermissionCodes.TreatmentUpdate,
+      shortname: 'Treatment Update',
+      description: 'Permission to update treatments',
+    },
+    {
+      code: PermissionCodes.TreatmentRead,
+      shortname: 'Treatment Read',
+      description: 'Permission to read treatments',
+    },
+    {
       code: PermissionCodes.DocumentationRead,
       shortname: 'Documentation read',
       description: 'Permission to read documentation from patients',
@@ -108,6 +128,41 @@ const seedPermissions = async (prisma: PrismaClient) => {
       code: PermissionCodes.DocumentationCreate,
       shortname: 'Documentation create',
       description: 'Permission to create documentation',
+    },
+    {
+      code: PermissionCodes.AreaProfessionalCreate,
+      shortname: 'AreaProfessional Create',
+      description: 'Create a relation between an Area and a Professional',
+    },
+    {
+      code: PermissionCodes.AreaProfessionalDelete,
+      shortname: 'AreaProfessional Delete',
+      description: 'Delete a relation between an Area and a Professional',
+    },
+    {
+      code: PermissionCodes.AppointmentCreate,
+      shortname: 'Appointment create',
+      description: 'Permission to create appointments',
+    },
+    {
+      code: PermissionCodes.AppointmentDelete,
+      shortname: 'Appointment delete',
+      description: 'Permission to delete appointments',
+    },
+    {
+      code: PermissionCodes.AppointmentUpdate,
+      shortname: 'Appointment update',
+      description: 'Permission to update appointments',
+    },
+    {
+      code: PermissionCodes.AppointmentRead,
+      shortname: 'Appointment read',
+      description: 'Permission to read appointments',
+    },
+    {
+      code: PermissionCodes.ChangePatientStatus,
+      shortname: 'Change patient status',
+      description: 'Permission to change patient status',
     },
   ];
 

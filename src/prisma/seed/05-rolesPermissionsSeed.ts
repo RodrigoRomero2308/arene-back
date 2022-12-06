@@ -148,6 +148,22 @@ const seedRolePermissions = async (prisma: PrismaClient) => {
       permissionCode: PermissionCodes.ProfessionalRead,
     },
     {
+      roleNames: [SystemRoles.Administrador, SystemRoles.Fisiatra],
+      permissionCode: PermissionCodes.TreatmentCreate,
+    },
+    {
+      roleNames: [SystemRoles.Administrador, SystemRoles.Fisiatra],
+      permissionCode: PermissionCodes.TreatmentUpdate,
+    },
+    {
+      roleNames: [SystemRoles.Administrador, SystemRoles.Fisiatra],
+      permissionCode: PermissionCodes.TreatmentDelete,
+    },
+    {
+      roleNames: [SystemRoles.Administrador, SystemRoles.Fisiatra],
+      permissionCode: PermissionCodes.TreatmentRead,
+    },
+    {
       roleNames: [
         SystemRoles.Administrador,
         SystemRoles.Director,
@@ -166,6 +182,64 @@ const seedRolePermissions = async (prisma: PrismaClient) => {
         SystemRoles.Profesional,
       ],
       permissionCode: PermissionCodes.DocumentationCreate,
+    },
+    {
+      roleNames: [SystemRoles.Coordinador, SystemRoles.Director],
+      permissionCode: PermissionCodes.AreaProfessionalCreate,
+    },
+    {
+      roleNames: [SystemRoles.Coordinador, SystemRoles.Director],
+      permissionCode: PermissionCodes.AreaProfessionalDelete,
+    },
+    {
+      roleNames: [
+        SystemRoles.Administrador,
+        SystemRoles.Director,
+        SystemRoles.Coordinador,
+        SystemRoles.Fisiatra,
+        SystemRoles.Profesional,
+      ],
+      permissionCode: PermissionCodes.AppointmentCreate,
+    },
+    {
+      roleNames: [
+        SystemRoles.Administrador,
+        SystemRoles.Director,
+        SystemRoles.Coordinador,
+        SystemRoles.Fisiatra,
+        SystemRoles.Profesional,
+      ],
+      permissionCode: PermissionCodes.AppointmentDelete,
+    },
+    {
+      roleNames: [
+        SystemRoles.Administrador,
+        SystemRoles.Director,
+        SystemRoles.Coordinador,
+        SystemRoles.Fisiatra,
+        SystemRoles.Profesional,
+      ],
+      permissionCode: PermissionCodes.AppointmentRead,
+    },
+    {
+      roleNames: [
+        SystemRoles.Administrador,
+        SystemRoles.Director,
+        SystemRoles.Coordinador,
+        SystemRoles.Fisiatra,
+        SystemRoles.Profesional,
+      ],
+      permissionCode: PermissionCodes.AppointmentUpdate,
+    },
+    {
+      roleNames: [
+        SystemRoles.Administrador,
+        SystemRoles.Director,
+        SystemRoles.Coordinador,
+        SystemRoles.Fisiatra,
+        SystemRoles.Profesional,
+      ],
+      permissionCode: PermissionCodes.ChangePatientStatus,
     },
   ];
 

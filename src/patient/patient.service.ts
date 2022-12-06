@@ -153,7 +153,7 @@ export class PatientService {
           create: {
             ...patient,
             created_by: userId,
-            patient_status_id: PatientStatus.Nuevo,
+            patient_status_id: PatientStatus.EnEvaluacionOS,
             PatientInformation: {
               create: {
                 information: 'Paciente creado',
@@ -263,6 +263,21 @@ export class PatientService {
       },
       select: {
         id: true,
+      },
+    });
+
+    return this.findById(id);
+  }
+
+  async changeStatus(id: number, statusId: number, userId: number) {
+    await this.prismaService.patient.update({
+      data: {
+        patient_status_id: statusId,
+        updated_by: userId,
+        uts: new Date(),
+      },
+      where: {
+        user_id: id,
       },
     });
 

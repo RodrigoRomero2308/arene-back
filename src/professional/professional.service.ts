@@ -173,6 +173,7 @@ export class ProfessionalService {
                       contains: role,
                     },
                   },
+                  deleted_by: null,
                 },
               },
             },
@@ -579,5 +580,9 @@ export class ProfessionalService {
     });
 
     return this.findById(id);
+  }
+
+  async getRolesThatProfessionalDontHave(id: number) {
+    await this.prismaService.role.findMany({});
   }
 }

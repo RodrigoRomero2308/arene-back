@@ -64,4 +64,14 @@ export class PatientResolver {
   ) {
     return this.patientService.update(id, input, user.id);
   }
+
+  @Mutation(() => Patient)
+  @RequiredPermissions(PermissionCodes.ChangePatientStatus)
+  async changeStatus(
+    @CurrentUser() user: AuthenticatedUser,
+    @Args('id', { type: () => Int }) id: number,
+    @Args('statusId', { type: () => Int }) statusId: number,
+  ) {
+    return this.patientService.changeStatus(id, statusId, user.id);
+  }
 }
