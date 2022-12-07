@@ -31,4 +31,5 @@ export enum PermissionCodes {
   AppointmentDelete = 'APPOINTMENT_D',
   AppointmentRead = 'APPOINTMENT_R',
   ChangePatientStatus = 'CHANGE_PATIENT_STATUS',
+  PatientStatusRead = 'PATIENT_STATUS_R',
 }
