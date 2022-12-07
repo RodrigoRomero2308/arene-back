@@ -1,3 +1,4 @@
+import { PatientInformationTypes } from '@/enums/patientInformationType.enum';
 import { PatientStatus } from '@/enums/patientStatus.enum';
 import { SystemRoles } from '@/enums/systemRoles.enum';
 import { HashService } from '@/hash/hash.service';
@@ -15,7 +16,7 @@ export class PatientService {
     private readonly prismaService: PrismaService,
     private readonly usersService: UsersService,
     private readonly hashService: HashService,
-  ) { }
+  ) {}
 
   private include: Prisma.PatientInclude = {
     user: {
@@ -154,6 +155,14 @@ export class PatientService {
             ...patient,
             created_by: userId,
             patient_status_id: PatientStatus.EnEvaluacionOS,
+            PatientInformation: {
+              create: {
+                patient_information_type_id:
+                  PatientInformationTypes.PacienteCreado,
+                information: 'Paciente creado',
+                created_by: userId,
+              },
+            },
           },
         },
         RoleUser: {
@@ -163,20 +172,20 @@ export class PatientService {
         },
         ...(address
           ? {
-            address: {
-              create: {
-                ...address,
-                created_by: userId,
+              address: {
+                create: {
+                  ...address,
+                  created_by: userId,
+                },
               },
-            },
-          }
+            }
           : {}),
         phoneType: phone_type_id
           ? {
-            connect: {
-              id: phone_type_id,
-            },
-          }
+              connect: {
+                id: phone_type_id,
+              },
+            }
           : undefined,
       },
       select: {
@@ -224,26 +233,34 @@ export class PatientService {
               ...patient,
               updated_by: userId,
               uts: new Date(),
+              PatientInformation: {
+                create: {
+                  patient_information_type_id:
+                    PatientInformationTypes.PacienteActualizado,
+                  information: 'Datos del paciente actualizados',
+                  created_by: userId,
+                },
+              },
             },
           },
         },
         ...(address
           ? {
-            address: {
-              update: {
-                ...address,
-                updated_by: userId,
-                uts: new Date(),
+              address: {
+                update: {
+                  ...address,
+                  updated_by: userId,
+                  uts: new Date(),
+                },
               },
-            },
-          }
+            }
           : {}),
         phoneType: phone_type_id
           ? {
-            connect: {
-              id: phone_type_id,
-            },
-          }
+              connect: {
+                id: phone_type_id,
+              },
+            }
           : undefined,
       },
       where: {

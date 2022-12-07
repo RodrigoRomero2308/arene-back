@@ -8,6 +8,7 @@ import seedAreas from '@/prisma/seed/06-areaSeed';
 import seedPatientStatus from '@/prisma/seed/07-patientStatusSeed';
 import seedPhoneType from '@/prisma/seed/08-phoneTypeSeed';
 import seedDocumentationType from '@/prisma/seed/09-documentationTypeSeed';
+import seedPatientInformationType from '@/prisma/seed/10-patientInformationTypeSeed';
 const prisma = new PrismaClient();
 
 async function main() {
@@ -20,6 +21,7 @@ async function main() {
   await seedPatientStatus(prisma);
   await seedPhoneType(prisma);
   await seedDocumentationType(prisma);
+  await seedPatientInformationType(prisma);
 }
 
 main()
