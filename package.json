@@ -45,6 +45,7 @@
     "express-session": "^1.17.2",
     "googleapis": "^109.0.1",
     "graphql": "^15.8.0",
+    "graphql-upload": "^13.0.0",
     "helmet": "^5.0.2",
     "ioredis": "^5.0.4",
     "mime-types": "^2.1.35",
