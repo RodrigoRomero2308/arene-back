@@ -102,5 +102,8 @@
   },
   "prisma": {
     "seed": "ts-node --transpile-only src/prisma/seed/seed.ts"
+  },
+  "overrides": {
+    "qs": ">=6.9.7"
   }
 }
