@@ -18,8 +18,7 @@ const seedPatientStatus = async (prisma: PrismaClient) => {
     id: number;
     name: string;
   }[] = [
-    
-     {
+    {
       id: PatientStatus.NoAceptado,
       name: 'No Aceptado',
     },
@@ -27,13 +26,13 @@ const seedPatientStatus = async (prisma: PrismaClient) => {
       id: PatientStatus.Aceptado,
       name: 'Aceptado',
     },
-       {
+    {
       id: PatientStatus.EnEvaluacionOS,
       name: 'En Evaluacion Obra Social',
     },
     {
       id: PatientStatus.AltaMedica,
-      name: 'AltaMedica',
+      name: 'Alta Medica',
     },
   ];
 

@@ -23,6 +23,7 @@ import { AreaProfessionalModule } from './area-professional/area-professional.mo
 import { AppointmentModule } from './appointment/appointment.module';
 import { DocumentationTypeModule } from './documentation_type/documentation_type.module';
 import { PatientInformationModule } from './patient-information/patient-information.module';
+import { PatientStatusModule } from './patient-status/patient-status.module';
 
 @Module({
   imports: [
@@ -69,6 +70,7 @@ import { PatientInformationModule } from './patient-information/patient-informat
     AppointmentModule,
     DocumentationTypeModule,
     PatientInformationModule,
+    PatientStatusModule,
   ],
   controllers: [AppController],
   providers: [AppService],
