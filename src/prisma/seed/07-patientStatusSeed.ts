@@ -32,17 +32,18 @@ const seedPatientStatus = async (prisma: PrismaClient) => {
     },
     {
       id: PatientStatus.AltaMedica,
-      name: 'Alta Medica',
+      name: 'Alta Médica',
     },
   ];
 
   const dbPatientStatuses = await prisma.patientStatus.findMany();
 
   let patientStatusCreated = 0;
+  let patientStatusUpdated = 0;
 
   for (const patientStatus of patientStatuses) {
     const dbPatientStatus = dbPatientStatuses.find(
-      (item) => item.name === patientStatus.name,
+      (item) => item.id === patientStatus.id,
     );
 
     if (!dbPatientStatus) {
@@ -56,10 +57,23 @@ const seedPatientStatus = async (prisma: PrismaClient) => {
           id: true,
         },
       });
+    } else if (dbPatientStatus.name !== patientStatus.name) {
+      patientStatusUpdated++;
+      await prisma.patientStatus.update({
+        data: {
+          ...patientStatus,
+          updated_by: adminUser.id,
+          uts: new Date(),
+        },
+        where: {
+          id: patientStatus.id,
+        },
+      });
     }
   }
 
-  console.log(`${patientStatusCreated} patient status`);
+  console.log(`${patientStatusCreated} patient status creados`);
+  console.log(`${patientStatusUpdated} patient status actualizados`);
 };
 
 export default seedPatientStatus;
