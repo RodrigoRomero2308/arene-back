@@ -4,14 +4,14 @@ import { CreateUserInput } from '@/users/DTO/createUserInput';
 
 @InputType()
 export class CreateProfessionalWithoutUserInput {
-  @Field()
-  @IsNotEmpty()
+  @Field({ nullable: true })
+  @IsNotEmpty({ message: 'El campo profesión no puede estar vació' })
   profession: string;
-  @Field()
-  @IsNotEmpty()
+  @Field({ nullable: true })
+  @IsNotEmpty({ message: 'El campo especialidad no puede estar vació' })
   speciality: string;
-  @Field()
-  @IsNotEmpty()
+  @Field({ nullable: true })
+  @IsNotEmpty({ message: 'El campo CUD no puede estar vacío' })
   medical_license_number: string;
 }
 
