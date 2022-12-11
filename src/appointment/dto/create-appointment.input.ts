@@ -6,9 +6,6 @@ export class CreateAppointmentInput {
   @Field(() => Int)
   @IsNotEmpty()
   treatment_id: number;
-  @Field(() => Int)
-  @IsNotEmpty()
-  professional_id: number;
   @Field(() => String)
   @IsNotEmpty()
   day_of_the_week: string;

@@ -4,7 +4,11 @@ import { SystemRoles } from '@/enums/systemRoles.enum';
 import { HashService } from '@/hash/hash.service';
 import { PrismaService } from '@/prisma/prisma.service';
 import { UsersService } from '@/users/users.service';
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { CreatePatientInput } from './DTO/createPatientInput';
 import { PatientFilter } from './DTO/patient.filter';
@@ -275,11 +279,44 @@ export class PatientService {
   }
 
   async changeStatus(id: number, statusId: number, userId: number) {
+    const patientPromise = this.prismaService.patient.findFirst({
+      where: {
+        user_id: id,
+        dts: null,
+      },
+      include: {
+        patientStatus: true,
+      },
+    });
+    const statusToChangeToPromise = this.prismaService.patientStatus.findFirst({
+      where: {
+        id: statusId,
+        dts: null,
+      },
+    });
+
+    const [patient, statusToChangeTo] = await Promise.all([
+      patientPromise,
+      statusToChangeToPromise,
+    ]);
+
+    if (!statusToChangeTo || !patient) {
+      throw new BadRequestException();
+    }
+
     await this.prismaService.patient.update({
       data: {
         patient_status_id: statusId,
         updated_by: userId,
         uts: new Date(),
+        PatientInformation: {
+          create: {
+            information: `Estado cambiado de ${patient.patientStatus.name} a ${statusToChangeTo.name}`,
+            patient_information_type_id:
+              PatientInformationTypes.PacienteEstadoCambiado,
+            created_by: userId,
+          },
+        },
       },
       where: {
         user_id: id,
