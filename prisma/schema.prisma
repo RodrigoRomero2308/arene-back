@@ -93,6 +93,12 @@ model User {
   professionalsCreated      Professional[]       @relation("professional_createdBy")
   professionalsUpdated      Professional[]       @relation("professional_updatedBy")
   professionalsDeleted      Professional[]       @relation("professional_deletedBy")
+  treatmentsCreated         Treatment[]          @relation("treatment_createdBy")
+  treatmentsUpdated         Treatment[]          @relation("treatment_updatedBy")
+  treatmentsDeleted         Treatment[]          @relation("treatment_deletedBy")
+  appointmentsCreated       Appointment[]        @relation("appointment_createdBy")
+  appointmentsUpdated       Appointment[]        @relation("appointment_updatedBy")
+  appointmentsDeleted       Appointment[]        @relation("appointment_deletedBy")
 }
 
 model Role {
@@ -366,7 +372,6 @@ model Professional {
   deletedBy              User?              @relation("professional_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   user                   User               @relation(fields: [user_id], references: [id])
   ProfessionalArea       ProfessionalArea[]
-  Appointment            Appointment[]
 }
 
 model ProfessionalArea {
@@ -382,22 +387,39 @@ model ProfessionalArea {
 }
 
 model Treatment {
-  id          Int           @id @default(autoincrement())
-  area_id     Int
-  quantity    Int
-  patient_id  Int
+  id         Int       @id @default(autoincrement())
+  area_id    Int
+  quantity   Int
+  patient_id Int
+  created_by Int
+  updated_by Int?
+  deleted_by Int?
+  its        DateTime  @default(now())
+  uts        DateTime?
+  dts        DateTime?
+  createdBy  User      @relation("treatment_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  updatedBy  User?     @relation("treatment_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  deletedBy  User?     @relation("treatment_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
   area        Area          @relation(fields: [area_id], references: [id])
   patient     Patient       @relation(fields: [patient_id], references: [user_id])
   Appointment Appointment[]
 }
 
 model Appointment {
-  id              Int          @id @default(autoincrement())
+  id              Int       @id @default(autoincrement())
   treatment_id    Int
-  professional_id Int
   day_of_the_week String
   start_hour      String
   end_hour        String
-  treatment       Treatment    @relation(fields: [treatment_id], references: [id])
-  professional    Professional @relation(fields: [professional_id], references: [user_id])
+  created_by      Int
+  updated_by      Int?
+  deleted_by      Int?
+  its             DateTime  @default(now())
+  uts             DateTime?
+  dts             DateTime?
+  createdBy       User      @relation("appointment_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  updatedBy       User?     @relation("appointment_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  deletedBy       User?     @relation("appointment_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  treatment       Treatment @relation(fields: [treatment_id], references: [id])
 }

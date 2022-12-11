@@ -11,7 +11,6 @@ import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { AppointmentService } from './appointment.service';
 import { AppointmentFilter } from './dto/appointment.filter';
 import { CreateAppointmentInput } from './dto/create-appointment.input';
-import { UpdateAppointmentInput } from './dto/update-appointment.input';
 
 @Resolver(() => Appointment)
 export class AppointmentResolver {
@@ -37,21 +36,7 @@ export class AppointmentResolver {
     })
     input: CreateAppointmentInput,
   ) {
-    return this.appointmentService.create(input);
-  }
-
-  @Mutation(() => Appointment)
-  @RequiredPermissions(PermissionCodes.AppointmentUpdate)
-  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
-  updateAppointment(
-    @CurrentUser() user: AuthenticatedUser,
-    @Args('id', { type: () => Int }) id: number,
-    @Args('input', {
-      type: () => UpdateAppointmentInput,
-    })
-    input: UpdateAppointmentInput,
-  ) {
-    return this.appointmentService.update(id, input);
+    return this.appointmentService.create(input, user);
   }
 
   @Mutation(() => Appointment)
@@ -61,6 +46,6 @@ export class AppointmentResolver {
     @CurrentUser() user: AuthenticatedUser,
     @Args('id', { type: () => Int }) id: number,
   ) {
-    return this.appointmentService.delete(id);
+    return this.appointmentService.delete(id, user);
   }
 }
