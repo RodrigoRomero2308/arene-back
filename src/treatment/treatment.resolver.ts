@@ -43,7 +43,7 @@ export class TreatmentResolver {
   @Mutation(() => Treatment)
   @RequiredPermissions(PermissionCodes.TreatmentUpdate)
   @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
-  updateArea(
+  updateTreatment(
     @CurrentUser() user: AuthenticatedUser,
     @Args('id', { type: () => Int }) id: number,
     @Args('input', {
