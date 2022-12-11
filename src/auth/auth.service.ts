@@ -21,7 +21,7 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new UnauthorizedException('Usuario o contraseña incorrectos');
+      throw new UnauthorizedException('Mail/DNI o contraseña incorrectos');
     }
 
     const isPasswordValid = await this.hashService.compareHash(
@@ -33,6 +33,6 @@ export class AuthService {
       return user;
     }
 
-    throw new UnauthorizedException('Usuario o contraseña incorrectos');
+    throw new UnauthorizedException('Mail/DNI o contraseña incorrectos');
   }
 }
