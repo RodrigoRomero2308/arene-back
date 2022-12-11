@@ -7,8 +7,6 @@ export class AppointmentFilter {
   @Field({ nullable: true })
   treatment_id?: number;
   @Field({ nullable: true })
-  professional_id?: number;
-  @Field({ nullable: true })
   day_of_the_week?: string;
   @Field({ nullable: true })
   start_hour?: string;

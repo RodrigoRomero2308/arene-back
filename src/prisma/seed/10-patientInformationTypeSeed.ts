@@ -20,6 +20,26 @@ const seedPatientInformationType = async (prisma: PrismaClient) => {
       id: PatientInformationTypes.DocumentacionAgregada,
       name: 'Documentación agregada',
     },
+    {
+      id: PatientInformationTypes.PacienteEstadoCambiado,
+      name: 'Estado de paciente cambiado',
+    },
+    {
+      id: PatientInformationTypes.TratamientoAsignado,
+      name: 'Tratamiento asignado',
+    },
+    {
+      id: PatientInformationTypes.TratamientoEliminado,
+      name: 'Tratamiento eliminado',
+    },
+    {
+      id: PatientInformationTypes.TurnoAsignado,
+      name: 'Turno asignado',
+    },
+    {
+      id: PatientInformationTypes.TurnoEliminado,
+      name: 'Turno eliminado',
+    },
   ];
 
   const dbPatientInformationTypes =
