@@ -11,6 +11,7 @@ export class PatientInformationService {
 
   include = Prisma.validator<Prisma.PatientInformationInclude>()({
     createdBy: true,
+    patientInformationType: true,
   });
 
   findAll({
