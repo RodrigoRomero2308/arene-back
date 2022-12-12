@@ -228,14 +228,16 @@ export class ProfessionalService {
             roleId: professionalRole.id,
           },
         },
-        address: address
+        ...(address
           ? {
-              create: {
-                ...address,
-                created_by: userId,
+              address: {
+                create: {
+                  ...address,
+                  created_by: userId,
+                },
               },
             }
-          : undefined,
+          : {}),
         phoneType: phone_type_id
           ? {
               connect: {
