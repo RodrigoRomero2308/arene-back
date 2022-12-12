@@ -10,4 +10,7 @@ export class PatientFilter {
 
   @Field({ nullable: true })
   email?: string;
+
+  @Field({ nullable: true })
+  area_id?: number;
 }
