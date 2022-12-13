@@ -148,6 +148,7 @@ export class AppointmentService {
         day_of_the_week,
         start_hour,
         end_hour,
+        dts: null,
       },
     });
 
