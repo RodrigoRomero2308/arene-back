@@ -1,6 +1,8 @@
 import { PrismaService } from '@/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { CreateRoleInput } from './dto/create-role.input';
+import { RoleFilter } from './dto/role.filter';
 import { UpdateRoleInput } from './dto/update-role.input';
 
 @Injectable()
@@ -14,7 +16,26 @@ export class RoleService {
     });
   }
 
-  getRoles() {
+  private getPrismaParameters({ filter = {} }: { filter?: RoleFilter }) {
+    const filtersToApply: Prisma.RoleWhereInput[] = [];
+
+    const { isProfessionalRole } = filter;
+
+    if (isProfessionalRole == false)
+      filtersToApply.push({
+        isProfessionalRole: false,
+      });
+    if (isProfessionalRole == true)
+      filtersToApply.push({
+        isProfessionalRole: true,
+      });
+
+    return filtersToApply;
+  }
+
+  getRoles({ filter }: { filter?: RoleFilter }) {
+    const whereFilters = this.getPrismaParameters({ filter });
+
     return this.prismaService.role.findMany({
       where: {
         AND: [
@@ -24,6 +45,7 @@ export class RoleService {
           {
             name: { not: 'Admin' },
           },
+          ...whereFilters,
         ],
       },
     });
