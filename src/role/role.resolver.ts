@@ -10,6 +10,7 @@ import { AuthenticatedUser } from '@/users/entity/authenticated.user.model';
 import { PermissionCodes } from '@/enums/permissionCodes.enum';
 import { RequiredPermissions } from '@/decorators/permission.decorator';
 import { PermissionsGuard } from '@/guards/permission.guard';
+import { RoleFilter } from './dto/role.filter';
 
 @Resolver()
 export class RoleResolver {
@@ -17,8 +18,8 @@ export class RoleResolver {
 
   @Query(() => [Role])
   @UseGuards(IsAuthenticatedGuard)
-  async getRoles() {
-    return this.roleService.getRoles();
+  async getRoles(@Args('filter', { nullable: true }) filter?: RoleFilter) {
+    return this.roleService.getRoles({ filter });
   }
 
   @Query(() => Role, {
