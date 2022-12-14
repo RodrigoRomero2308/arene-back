@@ -15,7 +15,15 @@ export class AppointmentService {
   constructor(private readonly prismaService: PrismaService) {}
 
   private include: Prisma.AppointmentInclude = {
-    treatment: true,
+    treatment: {
+      include: {
+        patient: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    },
   };
 
   private getPrismaParameters({ filter = {} }: { filter?: AppointmentFilter }) {
