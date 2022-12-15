@@ -9,6 +9,7 @@ import { EnvironmentVariable } from './enums/env.enum';
 import Redis from 'ioredis';
 import * as ConnectRedis from 'connect-redis';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { graphqlUploadExpress } from 'graphql-upload';
 
 const RedisStore = ConnectRedis(session);
 
@@ -85,6 +86,8 @@ async function bootstrap() {
       },
     }),
   );
+
+  app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
 
   // Start the app
   const port = +configService.get(EnvironmentVariable.PORT) || 3000;

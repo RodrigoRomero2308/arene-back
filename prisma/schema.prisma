@@ -24,17 +24,19 @@ datasource db {
 
 model User {
   id                        Int                  @id @default(autoincrement())
-  dni                       String               @unique
-  email                     String               @unique
+  dni                       String
+  email                     String
   firstname                 String
   lastname                  String
   /// @HideField()
   password                  String
   active                    Boolean
-  birth_date                DateTime             @db.Date
+  birth_date                String
   its                       DateTime             @default(now())
   uts                       DateTime?
   dts                       DateTime?
+  gender                    String?
+  marital_status            String?
   created_by                Int?
   updated_by                Int?
   deleted_by                Int?
@@ -52,12 +54,14 @@ model User {
   rolesUpdated              Role[]               @relation("role_updatedBy")
   rolesDeleted              Role[]               @relation("role_deletedBy")
   RoleUser                  RoleUser[]
+  roleUserCreated           RoleUser[]           @relation("roleUser_createdBy")
+  roleUserDeleted           RoleUser[]           @relation("roleUser_deletedBy")
   AssignedRolesPermissions  PermissionRole[]
   areasCreated              Area[]               @relation("area_createdBy")
   areasUpdated              Area[]               @relation("area_updatedBy")
   areasDeleted              Area[]               @relation("area_deletedBy")
   phoneType                 PhoneType?           @relation(fields: [phone_type_id], references: [id])
-  adress                    Address?             @relation(fields: [adress_id], references: [id])
+  address                   Address?             @relation(fields: [adress_id], references: [id])
   profilePicture            ProfilePicture?      @relation(fields: [profile_picture_id], references: [id])
   Patient                   Patient[]
   profilePicturesCreated    ProfilePicture[]     @relation("profile_picture_createdBy")
@@ -89,32 +93,44 @@ model User {
   professionalsCreated      Professional[]       @relation("professional_createdBy")
   professionalsUpdated      Professional[]       @relation("professional_updatedBy")
   professionalsDeleted      Professional[]       @relation("professional_deletedBy")
+  treatmentsCreated         Treatment[]          @relation("treatment_createdBy")
+  treatmentsUpdated         Treatment[]          @relation("treatment_updatedBy")
+  treatmentsDeleted         Treatment[]          @relation("treatment_deletedBy")
+  appointmentsCreated       Appointment[]        @relation("appointment_createdBy")
+  appointmentsUpdated       Appointment[]        @relation("appointment_updatedBy")
+  appointmentsDeleted       Appointment[]        @relation("appointment_deletedBy")
 }
 
 model Role {
-  id             Int              @id @default(autoincrement())
-  name           String
-  description    String?
-  its            DateTime         @default(now())
-  uts            DateTime?
-  dts            DateTime?
-  isSystemRole   Boolean          @default(false)
-  created_by     Int?
-  updated_by     Int?
-  deleted_by     Int?
-  createdBy      User?            @relation("role_createdBy", fields: [created_by], references: [id])
-  updatedBy      User?            @relation("role_updatedBy", fields: [updated_by], references: [id])
-  deletedBy      User?            @relation("role_deletedBy", fields: [deleted_by], references: [id])
-  RoleUser       RoleUser[]
-  PermissionRole PermissionRole[]
+  id                 Int              @id @default(autoincrement())
+  name               String
+  description        String?
+  its                DateTime         @default(now())
+  uts                DateTime?
+  dts                DateTime?
+  isSystemRole       Boolean          @default(false)
+  isProfessionalRole Boolean          @default(false)
+  created_by         Int?
+  updated_by         Int?
+  deleted_by         Int?
+  createdBy          User?            @relation("role_createdBy", fields: [created_by], references: [id])
+  updatedBy          User?            @relation("role_updatedBy", fields: [updated_by], references: [id])
+  deletedBy          User?            @relation("role_deletedBy", fields: [deleted_by], references: [id])
+  RoleUser           RoleUser[]
+  PermissionRole     PermissionRole[]
 }
 
 model RoleUser {
-  user User @relation(fields: [userId], references: [id])
-  role Role @relation(fields: [roleId], references: [id])
-
-  userId Int
-  roleId Int
+  user       User      @relation(fields: [userId], references: [id])
+  role       Role      @relation(fields: [roleId], references: [id])
+  userId     Int
+  roleId     Int
+  its        DateTime  @default(now())
+  dts        DateTime?
+  created_by Int?
+  deleted_by Int?
+  createdBy  User?     @relation("roleUser_createdBy", fields: [created_by], references: [id])
+  deletedBy  User?     @relation("roleUser_deletedBy", fields: [deleted_by], references: [id])
 
   @@id([userId, roleId])
 }
@@ -187,6 +203,7 @@ model PhoneType {
   patientCompanions     Patient[] @relation("patient_companion_phone_type_id")
   patientResponsibles   Patient[] @relation("patient_responsible_phone_type_id")
   patientPrimaryDoctors Patient[] @relation("patient_primary_doctor_phone_type_id")
+  Patient               Patient[]
 }
 
 model Address {
@@ -198,13 +215,13 @@ model Address {
   city        String
   department  String
   User        User[]
-  created_by  Int
+  created_by  Int?
   updated_by  Int?
   deleted_by  Int?
   its         DateTime  @default(now())
   uts         DateTime?
   dts         DateTime?
-  createdBy   User      @relation("address_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  createdBy   User?     @relation("address_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   updatedBy   User?     @relation("address_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   deletedBy   User?     @relation("address_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
@@ -240,7 +257,21 @@ model Patient {
   primary_doctor_phone_type_id Int?
   primary_doctor_phone_number  String?
   diagnose                     String
-  diagnose_date                DateTime
+  diagnose_date                String
+  needs_transfer               Boolean              @default(false)
+  transfer                     String?
+  transfer_responsible         String?
+  transfer_phone_type_id       Int?
+  transfer_phone_number        String?
+  cud_number                   String?
+  cud_companion                Boolean?
+  cud_valid_from               String?
+  cud_valid_to                 String?
+  social_work                  String?
+  social_work_plan             String?
+  social_work_number           String?
+  social_work_valid_from       String?
+  social_work_valid_to         String?
   created_by                   Int
   updated_by                   Int?
   deleted_by                   Int?
@@ -255,27 +286,36 @@ model Patient {
   companion_phone_type         PhoneType?           @relation("patient_companion_phone_type_id", fields: [companion_phone_type_id], references: [id])
   responsible_phone_type       PhoneType?           @relation("patient_responsible_phone_type_id", fields: [responsible_phone_type_id], references: [id])
   primary_doctor_phone_type    PhoneType?           @relation("patient_primary_doctor_phone_type_id", fields: [primary_doctor_phone_type_id], references: [id])
+  transfer_phone_type          PhoneType?           @relation(fields: [transfer_phone_type_id], references: [id])
   PatientInformation           PatientInformation[]
   Documentation                Documentation[]
   Treatment                    Treatment[]
 }
 
+model PatientInformationType {
+  id                 Int                  @id
+  name               String
+  PatientInformation PatientInformation[]
+}
+
 model PatientInformation {
-  id               Int            @id @default(autoincrement())
-  patient_id       Int
-  information      String
-  documentation_id Int?
-  created_by       Int
-  updated_by       Int?
-  deleted_by       Int?
-  its              DateTime       @default(now())
-  uts              DateTime?
-  dts              DateTime?
-  createdBy        User           @relation("patient_information_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  updatedBy        User?          @relation("patient_information_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  deletedBy        User?          @relation("patient_information_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  patient          Patient        @relation(fields: [patient_id], references: [user_id])
-  documentation    Documentation? @relation(fields: [documentation_id], references: [id])
+  id                          Int                    @id @default(autoincrement())
+  patient_id                  Int
+  information                 String
+  documentation_id            Int?
+  patient_information_type_id Int
+  created_by                  Int?
+  updated_by                  Int?
+  deleted_by                  Int?
+  its                         DateTime               @default(now())
+  uts                         DateTime?
+  dts                         DateTime?
+  createdBy                   User?                  @relation("patient_information_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  updatedBy                   User?                  @relation("patient_information_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  deletedBy                   User?                  @relation("patient_information_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  patient                     Patient                @relation(fields: [patient_id], references: [user_id])
+  documentation               Documentation?         @relation(fields: [documentation_id], references: [id])
+  patientInformationType      PatientInformationType @relation(fields: [patient_information_type_id], references: [id])
 }
 
 model DocumentationType {
@@ -295,24 +335,26 @@ model DocumentationType {
 }
 
 model Documentation {
-  id                     Int                  @id @default(autoincrement())
-  patientUser_id         Int
-  documentationTypeId    Int?
-  otherDocumentationType String?
-  filename               String
-  mimetype               String
-  created_by             Int
-  updated_by             Int?
-  deleted_by             Int?
-  its                    DateTime             @default(now())
-  uts                    DateTime?
-  dts                    DateTime?
-  createdBy              User                 @relation("documentation_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  updatedBy              User?                @relation("documentation_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  deletedBy              User?                @relation("documentation_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  patient                Patient              @relation(fields: [patientUser_id], references: [user_id])
-  documentationType      DocumentationType?   @relation(fields: [documentationTypeId], references: [id])
-  PatientInformation     PatientInformation[]
+  id                       Int                  @id @default(autoincrement())
+  patient_id               Int
+  documentation_type_id    Int?
+  other_documentation_type String?
+  /// @HideField()
+  external_id              String
+  filename                 String
+  mimetype                 String
+  created_by               Int
+  updated_by               Int?
+  deleted_by               Int?
+  its                      DateTime             @default(now())
+  uts                      DateTime?
+  dts                      DateTime?
+  createdBy                User                 @relation("documentation_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  updatedBy                User?                @relation("documentation_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  deletedBy                User?                @relation("documentation_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  patient                  Patient              @relation(fields: [patient_id], references: [user_id])
+  documentationType        DocumentationType?   @relation(fields: [documentation_type_id], references: [id])
+  PatientInformation       PatientInformation[]
 }
 
 model Professional {
@@ -331,7 +373,6 @@ model Professional {
   deletedBy              User?              @relation("professional_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   user                   User               @relation(fields: [user_id], references: [id])
   ProfessionalArea       ProfessionalArea[]
-  Appointment            Appointment[]
 }
 
 model ProfessionalArea {
@@ -347,21 +388,39 @@ model ProfessionalArea {
 }
 
 model Treatment {
-  id          Int           @id @default(autoincrement())
-  area_id     Int
-  quantity    Int
-  patient_id  Int
+  id         Int       @id @default(autoincrement())
+  area_id    Int
+  quantity   Int
+  patient_id Int
+  created_by Int
+  updated_by Int?
+  deleted_by Int?
+  its        DateTime  @default(now())
+  uts        DateTime?
+  dts        DateTime?
+  createdBy  User      @relation("treatment_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  updatedBy  User?     @relation("treatment_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  deletedBy  User?     @relation("treatment_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
   area        Area          @relation(fields: [area_id], references: [id])
   patient     Patient       @relation(fields: [patient_id], references: [user_id])
   Appointment Appointment[]
 }
 
 model Appointment {
-  id              Int          @id @default(autoincrement())
+  id              Int       @id @default(autoincrement())
   treatment_id    Int
-  professional_id Int
-  start_date      DateTime
-  end_date        DateTime
-  treatment       Treatment    @relation(fields: [treatment_id], references: [id])
-  professional    Professional @relation(fields: [professional_id], references: [user_id])
+  day_of_the_week String
+  start_hour      String
+  end_hour        String
+  created_by      Int
+  updated_by      Int?
+  deleted_by      Int?
+  its             DateTime  @default(now())
+  uts             DateTime?
+  dts             DateTime?
+  createdBy       User      @relation("appointment_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  updatedBy       User?     @relation("appointment_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  deletedBy       User?     @relation("appointment_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  treatment       Treatment @relation(fields: [treatment_id], references: [id])
 }

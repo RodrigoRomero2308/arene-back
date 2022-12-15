@@ -1,5 +1,5 @@
 import { PrismaService } from '@/prisma/prisma.service';
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UpdateAreaInput } from '@/area/DTO/updateAreaInput';
 import { CreateAreaInput } from '@/area/DTO/createAreaInput';
 
@@ -83,14 +83,88 @@ export class AreaService {
   }
 
   async delete(id: number, userId: number) {
-    return this.prismaService.area.update({
+    const [result] = await this.prismaService.$transaction([
+      this.prismaService.area.update({
+        where: {
+          id,
+        },
+        data: {
+          deleted_by: userId,
+          dts: new Date(),
+        },
+      }),
+      this.prismaService.professionalArea.deleteMany({
+        where: {
+          area_id: id,
+        },
+      }),
+      this.prismaService.treatment.updateMany({
+        where: {
+          area_id: id,
+        },
+        data: {
+          dts: new Date(),
+          deleted_by: userId,
+        },
+      }),
+    ]);
+
+    return result;
+  }
+
+  async getAreaByAreaName(areaName: string) {
+    await this.prismaService.area.findFirst({
       where: {
-        id,
-      },
-      data: {
-        deleted_by: userId,
-        dts: new Date(),
+        name: areaName,
       },
     });
+  }
+
+  async getAreaActiveRelations(id: number) {
+    const area = await this.prismaService.area.findFirst({
+      where: {
+        id,
+        dts: null,
+      },
+    });
+
+    if (!area) {
+      throw new InternalServerErrorException('Area no encontrada');
+    }
+
+    const [treatmentCount, professionalAreaCount] = await Promise.all([
+      this.prismaService.treatment.count({
+        where: {
+          dts: null,
+          area_id: id,
+          patient: {
+            dts: null,
+            user: {
+              dts: null,
+            },
+          },
+        },
+      }),
+      this.prismaService.professionalArea.count({
+        where: {
+          area_id: id,
+          professional: {
+            dts: null,
+          },
+        },
+      }),
+    ]);
+
+    const relationsWithCount = [];
+
+    if (treatmentCount) {
+      relationsWithCount.push('treatment');
+    }
+
+    if (professionalAreaCount) {
+      relationsWithCount.push('professionalArea');
+    }
+
+    return relationsWithCount;
   }
 }

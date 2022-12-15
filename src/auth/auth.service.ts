@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { HashService } from '@/hash/hash.service';
 import { UsersService } from '@/users/users.service';
 @Injectable()
@@ -21,7 +21,7 @@ export class AuthService {
     });
 
     if (!user) {
-      return null;
+      throw new UnauthorizedException('Mail/DNI o contraseña incorrectos');
     }
 
     const isPasswordValid = await this.hashService.compareHash(
@@ -33,6 +33,6 @@ export class AuthService {
       return user;
     }
 
-    return null;
+    throw new UnauthorizedException('Mail/DNI o contraseña incorrectos');
   }
 }
