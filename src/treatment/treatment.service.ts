@@ -106,6 +106,7 @@ export class TreatmentService {
           ...input,
           created_by: user.id,
         },
+        include: this.include,
       }),
       this.prismaService.patientInformation.create({
         data: {
@@ -158,6 +159,7 @@ export class TreatmentService {
             ],
           },
         },
+        include: this.include,
       }),
       this.prismaService.patientInformation.create({
         data: {
