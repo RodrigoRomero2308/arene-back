@@ -9,21 +9,27 @@ const seedRoles = async (prisma: PrismaClient) => {
     },
     {
       name: SystemRoles.Administrador,
+      isProfessionalRole: true,
     },
     {
       name: SystemRoles.Coordinador,
+      isProfessionalRole: true,
     },
     {
       name: SystemRoles.Director,
+      isProfessionalRole: true,
     },
     {
       name: SystemRoles.Fisiatra,
+      isProfessionalRole: true,
     },
     {
       name: SystemRoles.Paciente,
+      isProfessionalRole: false,
     },
     {
       name: SystemRoles.Profesional,
+      isProfessionalRole: true,
     },
   ];
 
@@ -46,10 +52,11 @@ const seedRoles = async (prisma: PrismaClient) => {
           id: true,
         },
       });
-    } else if (!dbRole.isSystemRole) {
+    } else {
       await prisma.role.update({
         data: {
           isSystemRole: true,
+          ...role,
         },
         where: {
           id: dbRole.id,

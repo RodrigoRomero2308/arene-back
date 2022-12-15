@@ -75,9 +75,15 @@ export class AreaResolver {
   @RequiredPermissions(PermissionCodes.AdminArea)
   @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
   async getAreaByAreaName(
-    @CurrentUser() user: AuthenticatedUser,
     @Args('areaName', { type: () => String }) areaName: string,
   ) {
     return this.areaService.getAreaByAreaName(areaName);
+  }
+
+  @Query(() => [String])
+  @RequiredPermissions(PermissionCodes.AreaDelete)
+  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
+  async getAreaActiveRelations(@Args('id', { type: () => Int }) id: number) {
+    return this.areaService.getAreaActiveRelations(id);
   }
 }
