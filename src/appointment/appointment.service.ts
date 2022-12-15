@@ -15,7 +15,15 @@ export class AppointmentService {
   constructor(private readonly prismaService: PrismaService) {}
 
   private include: Prisma.AppointmentInclude = {
-    treatment: true,
+    treatment: {
+      include: {
+        patient: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    },
   };
 
   private getPrismaParameters({ filter = {} }: { filter?: AppointmentFilter }) {
@@ -26,6 +34,7 @@ export class AppointmentService {
     if (id)
       filtersToApply.push({
         id,
+        dts: null,
       });
 
     if (treatment_id)
@@ -66,7 +75,12 @@ export class AppointmentService {
 
     return this.prismaService.appointment.findMany({
       where: {
-        AND: whereFilters,
+        AND: [
+          {
+            dts: null,
+          },
+          ...whereFilters,
+        ],
       },
       include: this.include,
       skip,
@@ -137,10 +151,12 @@ export class AppointmentService {
       where: {
         treatment: {
           patient_id: treatment.patient_id,
+          dts: null,
         },
         day_of_the_week,
         start_hour,
         end_hour,
+        dts: null,
       },
     });
 
