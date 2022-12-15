@@ -81,4 +81,11 @@ export class RoleResolver {
   ) {
     return this.roleService.getRoleByName(name);
   }
+
+  @Query(() => [String])
+  @RequiredPermissions(PermissionCodes.RoleDelete)
+  @UseGuards(IsAuthenticatedGuard, PermissionsGuard)
+  async getRoleActiveRelations(@Args('id', { type: () => Int }) id: number) {
+    return this.roleService.getRoleActiveRelations(id);
+  }
 }

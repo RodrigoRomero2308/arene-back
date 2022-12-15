@@ -1,5 +1,5 @@
 import { PrismaService } from '@/prisma/prisma.service';
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { CreateRoleInput } from './dto/create-role.input';
 import { RoleFilter } from './dto/role.filter';
@@ -128,5 +128,36 @@ export class RoleService {
         name: name,
       },
     });
+  }
+
+  async getRoleActiveRelations(id: number) {
+    const role = await this.prismaService.role.findFirst({
+      where: {
+        id,
+        dts: null,
+      },
+    });
+
+    if (!role) {
+      throw new InternalServerErrorException('Rol no encontrado');
+    }
+
+    const [roleCount] = await Promise.all([
+      this.prismaService.roleUser.count({
+        where: {
+          dts: null,
+          roleId: id,
+          user: {
+            dts: null,
+          },
+        },
+      }),
+    ]);
+
+    const relationsWithCount = [];
+
+    if (roleCount) relationsWithCount.push('roleUser');
+
+    return relationsWithCount;
   }
 }
