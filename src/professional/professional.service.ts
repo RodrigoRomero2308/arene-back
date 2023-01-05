@@ -285,8 +285,8 @@ export class ProfessionalService {
         Professional: {
           create: {
             profession: 'Administrador',
-            medical_license_number: professional.medical_license_number,
-            speciality: professional.speciality,
+            medical_license_number: '0',
+            speciality: 'Administrador',
             created_by: userId,
           },
         },
@@ -350,8 +350,8 @@ export class ProfessionalService {
         Professional: {
           create: {
             profession: 'Coordinador',
-            medical_license_number: professional.medical_license_number,
-            speciality: professional.speciality,
+            medical_license_number: '0',
+            speciality: 'Coordinador',
             created_by: userId,
           },
         },
@@ -387,7 +387,7 @@ export class ProfessionalService {
   async createDirector(input: CreateProfessionalInput, userId: number) {
     await this.usersService.validateRegister(input);
     input.password = await this.hashService.hash(input.password);
-    const { professional, address, phone_type_id, ...createUserInput } = input;
+    const { address, phone_type_id, ...createUserInput } = input;
 
     const directorRole = await this.prismaService.role.findFirst({
       where: {
@@ -415,8 +415,8 @@ export class ProfessionalService {
         Professional: {
           create: {
             profession: 'Director',
-            medical_license_number: professional.medical_license_number,
-            speciality: professional.speciality,
+            medical_license_number: '0',
+            speciality: 'Director',
             created_by: userId,
           },
         },
@@ -515,7 +515,7 @@ export class ProfessionalService {
   }
 
   async update(id: number, input: UpdateProfessionalInput, userId: number) {
-    await this.usersService.validateRegister(
+    await this.usersService.validateUpdate(
       {
         dni: input.dni || '',
         email: input.email || '',
