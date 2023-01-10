@@ -90,18 +90,17 @@ export class PatientService {
         },
       });
 
-      if(area_id)
+    if (area_id)
       filtersToApply.push({
         Treatment: {
           some: {
             AND: {
               area_id: area_id,
               dts: null,
-            }
+            },
           },
         },
       });
-
 
     return filtersToApply;
   }
@@ -214,7 +213,7 @@ export class PatientService {
   }
 
   async update(id: number, input: UpdatePatientInput, userId: number) {
-    await this.usersService.validateRegister(
+    await this.usersService.validateUpdate(
       {
         dni: input.dni || '',
         email: input.email || '',
