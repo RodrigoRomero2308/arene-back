@@ -10,7 +10,9 @@ export class CreateOnlyUserInput {
   dni: string;
   @Field()
   @IsNotEmpty({ message: 'El email no puede estar vacío' })
-  @IsEmail({ message: 'El email ingresado no es válido' })
+  @IsEmail(undefined, {
+    message: 'El email ingresado no es válido',
+  })
   email: string;
   @Field()
   @IsNotEmpty({ message: 'El nombre no puede estar vacío' })
