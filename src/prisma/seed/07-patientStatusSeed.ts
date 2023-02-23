@@ -17,22 +17,27 @@ const seedPatientStatus = async (prisma: PrismaClient) => {
   const patientStatuses: {
     id: number;
     name: string;
+    color: string;
   }[] = [
     {
       id: PatientStatus.NoAceptado,
       name: 'No Aceptado',
+      color: 'red',
     },
     {
       id: PatientStatus.Aceptado,
       name: 'Aceptado',
+      color: 'green',
     },
     {
       id: PatientStatus.EnEvaluacionOS,
       name: 'En Evaluacion Obra Social',
+      color: 'cyan',
     },
     {
       id: PatientStatus.AltaMedica,
       name: 'Alta Médica',
+      color: 'yellow',
     },
   ];
 
@@ -57,7 +62,10 @@ const seedPatientStatus = async (prisma: PrismaClient) => {
           id: true,
         },
       });
-    } else if (dbPatientStatus.name !== patientStatus.name) {
+    } else if (
+      dbPatientStatus.name !== patientStatus.name ||
+      dbPatientStatus.color !== patientStatus.color
+    ) {
       patientStatusUpdated++;
       await prisma.patientStatus.update({
         data: {

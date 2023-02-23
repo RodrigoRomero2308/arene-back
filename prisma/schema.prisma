@@ -262,6 +262,7 @@ model Address {
 model PatientStatus {
   id         Int       @id @default(autoincrement())
   name       String
+  color      String    @default("")
   created_by Int
   updated_by Int?
   deleted_by Int?
