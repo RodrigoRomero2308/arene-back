@@ -52,7 +52,7 @@ export class PatientService {
   private getPrismaParameters({ filter = {} }: { filter?: PatientFilter }) {
     const filtersToApply: Prisma.PatientWhereInput[] = [];
 
-    const { dni, email, name, area_id } = filter;
+    const { dni, email, name, area_id, patient_status_id } = filter;
 
     if (dni)
       filtersToApply.push({
@@ -100,6 +100,11 @@ export class PatientService {
             },
           },
         },
+      });
+
+    if (patient_status_id)
+      filtersToApply.push({
+        patient_status_id,
       });
 
     return filtersToApply;
