@@ -263,6 +263,7 @@ model PatientStatus {
   id         Int       @id @default(autoincrement())
   name       String
   color      String    @default("")
+  order      Int       @default(10)
   created_by Int
   updated_by Int?
   deleted_by Int?

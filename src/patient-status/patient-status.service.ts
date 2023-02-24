@@ -10,6 +10,9 @@ export class PatientStatusService {
       where: {
         dts: null,
       },
+      orderBy: {
+        order: 'asc',
+      },
     });
   }
 
