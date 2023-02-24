@@ -13,4 +13,7 @@ export class PatientFilter {
 
   @Field({ nullable: true })
   area_id?: number;
+
+  @Field({ nullable: true })
+  patient_status_id?: number;
 }

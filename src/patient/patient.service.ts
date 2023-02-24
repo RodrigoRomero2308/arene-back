@@ -52,7 +52,7 @@ export class PatientService {
   private getPrismaParameters({ filter = {} }: { filter?: PatientFilter }) {
     const filtersToApply: Prisma.PatientWhereInput[] = [];
 
-    const { dni, email, name, area_id } = filter;
+    const { dni, email, name, area_id, patient_status_id } = filter;
 
     if (dni)
       filtersToApply.push({
@@ -90,18 +90,22 @@ export class PatientService {
         },
       });
 
-      if(area_id)
+    if (area_id)
       filtersToApply.push({
         Treatment: {
           some: {
             AND: {
               area_id: area_id,
               dts: null,
-            }
+            },
           },
         },
       });
 
+    if (patient_status_id)
+      filtersToApply.push({
+        patient_status_id,
+      });
 
     return filtersToApply;
   }
@@ -214,7 +218,7 @@ export class PatientService {
   }
 
   async update(id: number, input: UpdatePatientInput, userId: number) {
-    await this.usersService.validateRegister(
+    await this.usersService.validateUpdate(
       {
         dni: input.dni || '',
         email: input.email || '',

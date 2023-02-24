@@ -38,6 +38,75 @@ export class UsersService {
     return this.prismaService.user.findMany(findManyArgs);
   };
 
+  validateUpdate = async (
+    input: {
+      dni: string;
+      email: string;
+    },
+    options: {
+      excludeUserId?: number;
+      excludeDni?: boolean;
+      excludeEmail?: boolean;
+    } = {},
+  ) => {
+    /* Aca realizaremos controles por ejemplo si ya existe un usuario con el dni o email que se esta queriendo usar para registrarse */
+    const userFilter: Prisma.UserWhereInput[] = [];
+
+    if (options.excludeDni) {
+      userFilter.push({
+        dni: input.dni,
+        dts: null,
+      });
+    }
+
+    if (options.excludeEmail) {
+      userFilter.push({
+        email: input.email,
+        dts: null,
+      });
+    }
+
+    let alreadyExistingUserDNI: string | undefined;
+
+    let alreadyExistingUserEmail: string | undefined;
+
+    if (userFilter.length) {
+      const queryResult = await this.findOne({
+        OR: userFilter,
+        AND: [
+          {
+            id: {
+              not: options.excludeUserId,
+            },
+          },
+        ],
+      });
+
+      alreadyExistingUserDNI = queryResult?.dni;
+      alreadyExistingUserEmail = queryResult?.email;
+    }
+    if (
+      alreadyExistingUserDNI == input.dni &&
+      alreadyExistingUserEmail == input.email
+    ) {
+      throw new InternalServerErrorException({
+        message: 'Ya existe un usuario registrado con el mismo DNI e Email',
+      });
+    }
+
+    if (alreadyExistingUserDNI == input.dni) {
+      throw new InternalServerErrorException({
+        message: 'Ya existe un usuario registrado con el mismo DNI',
+      });
+    }
+    if (alreadyExistingUserEmail == input.email) {
+      throw new InternalServerErrorException({
+        message: 'Ya existe un usuario registrado con el mismo Email',
+      });
+    }
+    return;
+  };
+
   validateRegister = async (
     input: {
       dni: string;
@@ -66,7 +135,9 @@ export class UsersService {
       });
     }
 
-    let alreadyExistingUser: number | undefined;
+    let alreadyExistingUserDNI: string | undefined;
+
+    let alreadyExistingUserEmail: string | undefined;
 
     if (userFilter.length) {
       const queryResult = await this.findOne({
@@ -78,12 +149,18 @@ export class UsersService {
         ],
       });
 
-      alreadyExistingUser = queryResult?.id;
+      alreadyExistingUserDNI = queryResult?.dni;
+      alreadyExistingUserEmail = queryResult?.email;
     }
 
-    if (alreadyExistingUser) {
+    if (alreadyExistingUserDNI == input.dni) {
       throw new InternalServerErrorException({
-        message: 'Ya existe un usuario registrado con este DNI o email',
+        message: 'Ya existe un usuario registrado con el mismo DNI',
+      });
+    }
+    if (alreadyExistingUserEmail == input.email) {
+      throw new InternalServerErrorException({
+        message: 'Ya existe un usuario registrado con el mismo Email',
       });
     }
     return;
@@ -157,7 +234,7 @@ export class UsersService {
   }
 
   async update(id: number, input: UpdateUserInput, userId: number) {
-    await this.validateRegister(
+    await this.validateUpdate(
       {
         dni: input.dni || '',
         email: input.email || '',

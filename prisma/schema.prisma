@@ -1,6 +1,5 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity"]
+  provider = "prisma-client-js"
 }
 
 generator nestgraphql {
@@ -17,9 +16,9 @@ generator dbml {
 }
 
 datasource db {
-  provider             = "mysql"
-  url                  = env("DATABASE_URL")
-  referentialIntegrity = "prisma"
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model User {
@@ -99,6 +98,13 @@ model User {
   appointmentsCreated       Appointment[]        @relation("appointment_createdBy")
   appointmentsUpdated       Appointment[]        @relation("appointment_updatedBy")
   appointmentsDeleted       Appointment[]        @relation("appointment_deletedBy")
+
+  @@index([created_by])
+  @@index([updated_by])
+  @@index([deleted_by])
+  @@index([phone_type_id])
+  @@index([adress_id])
+  @@index([profile_picture_id])
 }
 
 model Role {
@@ -118,6 +124,10 @@ model Role {
   deletedBy          User?            @relation("role_deletedBy", fields: [deleted_by], references: [id])
   RoleUser           RoleUser[]
   PermissionRole     PermissionRole[]
+
+  @@index([created_by])
+  @@index([updated_by])
+  @@index([deleted_by])
 }
 
 model RoleUser {
@@ -133,6 +143,10 @@ model RoleUser {
   deletedBy  User?     @relation("roleUser_deletedBy", fields: [deleted_by], references: [id])
 
   @@id([userId, roleId])
+  @@index([userId])
+  @@index([roleId])
+  @@index([created_by])
+  @@index([deleted_by])
 }
 
 model Permission {
@@ -152,6 +166,9 @@ model PermissionRole {
   createdBy      User       @relation(fields: [created_by], references: [id])
 
   @@id([permissionCode, roleId])
+  @@index([permissionCode])
+  @@index([roleId])
+  @@index([created_by])
 }
 
 model Area {
@@ -169,6 +186,10 @@ model Area {
   deletedBy        User?              @relation("area_deletedBy", fields: [deleted_by], references: [id])
   ProfessionalArea ProfessionalArea[]
   Treatment        Treatment[]
+
+  @@index([created_by])
+  @@index([updated_by])
+  @@index([deleted_by])
 }
 
 model ProfilePicture {
@@ -185,6 +206,10 @@ model ProfilePicture {
   createdBy  User      @relation("profile_picture_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   updatedBy  User?     @relation("profile_picture_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   deletedBy  User?     @relation("profile_picture_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([created_by])
+  @@index([updated_by])
+  @@index([deleted_by])
 }
 
 model PhoneType {
@@ -204,6 +229,10 @@ model PhoneType {
   patientResponsibles   Patient[] @relation("patient_responsible_phone_type_id")
   patientPrimaryDoctors Patient[] @relation("patient_primary_doctor_phone_type_id")
   Patient               Patient[]
+
+  @@index([created_by])
+  @@index([updated_by])
+  @@index([deleted_by])
 }
 
 model Address {
@@ -224,11 +253,17 @@ model Address {
   createdBy   User?     @relation("address_createdBy", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   updatedBy   User?     @relation("address_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   deletedBy   User?     @relation("address_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([created_by])
+  @@index([updated_by])
+  @@index([deleted_by])
 }
 
 model PatientStatus {
   id         Int       @id @default(autoincrement())
   name       String
+  color      String    @default("")
+  order      Int       @default(10)
   created_by Int
   updated_by Int?
   deleted_by Int?
@@ -239,6 +274,10 @@ model PatientStatus {
   updatedBy  User?     @relation("patient_status_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   deletedBy  User?     @relation("patient_status_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Patient    Patient[]
+
+  @@index([created_by])
+  @@index([updated_by])
+  @@index([deleted_by])
 }
 
 model Patient {
@@ -290,6 +329,16 @@ model Patient {
   PatientInformation           PatientInformation[]
   Documentation                Documentation[]
   Treatment                    Treatment[]
+
+  @@index([created_by])
+  @@index([updated_by])
+  @@index([deleted_by])
+  @@index([user_id])
+  @@index([patient_status_id])
+  @@index([companion_phone_type_id])
+  @@index([responsible_phone_type_id])
+  @@index([primary_doctor_phone_type_id])
+  @@index([transfer_phone_type_id])
 }
 
 model PatientInformationType {
@@ -316,6 +365,13 @@ model PatientInformation {
   patient                     Patient                @relation(fields: [patient_id], references: [user_id])
   documentation               Documentation?         @relation(fields: [documentation_id], references: [id])
   patientInformationType      PatientInformationType @relation(fields: [patient_information_type_id], references: [id])
+
+  @@index([created_by])
+  @@index([updated_by])
+  @@index([deleted_by])
+  @@index([patient_id])
+  @@index([documentation_id])
+  @@index([patient_information_type_id])
 }
 
 model DocumentationType {
@@ -332,6 +388,10 @@ model DocumentationType {
   updatedBy     User?           @relation("documentation_type_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   deletedBy     User?           @relation("documentation_type_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Documentation Documentation[]
+
+  @@index([created_by])
+  @@index([updated_by])
+  @@index([deleted_by])
 }
 
 model Documentation {
@@ -355,6 +415,12 @@ model Documentation {
   patient                  Patient              @relation(fields: [patient_id], references: [user_id])
   documentationType        DocumentationType?   @relation(fields: [documentation_type_id], references: [id])
   PatientInformation       PatientInformation[]
+
+  @@index([created_by])
+  @@index([updated_by])
+  @@index([deleted_by])
+  @@index([patient_id])
+  @@index([documentation_type_id])
 }
 
 model Professional {
@@ -373,6 +439,11 @@ model Professional {
   deletedBy              User?              @relation("professional_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   user                   User               @relation(fields: [user_id], references: [id])
   ProfessionalArea       ProfessionalArea[]
+
+  @@index([created_by])
+  @@index([updated_by])
+  @@index([deleted_by])
+  @@index([user_id])
 }
 
 model ProfessionalArea {
@@ -385,6 +456,9 @@ model ProfessionalArea {
   area            Area         @relation(fields: [area_id], references: [id])
 
   @@id([area_id, professional_id])
+  @@index([created_by])
+  @@index([professional_id])
+  @@index([area_id])
 }
 
 model Treatment {
@@ -405,6 +479,12 @@ model Treatment {
   area        Area          @relation(fields: [area_id], references: [id])
   patient     Patient       @relation(fields: [patient_id], references: [user_id])
   Appointment Appointment[]
+
+  @@index([created_by])
+  @@index([updated_by])
+  @@index([deleted_by])
+  @@index([area_id])
+  @@index([patient_id])
 }
 
 model Appointment {
@@ -423,4 +503,9 @@ model Appointment {
   updatedBy       User?     @relation("appointment_updatedBy", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   deletedBy       User?     @relation("appointment_deletedBy", fields: [deleted_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   treatment       Treatment @relation(fields: [treatment_id], references: [id])
+
+  @@index([created_by])
+  @@index([updated_by])
+  @@index([deleted_by])
+  @@index([treatment_id])
 }
